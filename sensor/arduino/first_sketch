@@ -1,3 +1,6 @@
+// Needs Adafruit Unified Library 
+// and DHT Library: https://github.com/adafruit/DHT-sensor-library
+
 #include <DHT_U.h>
 #include <DHT.h>
 
