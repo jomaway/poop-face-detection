@@ -1,0 +1,80 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{ngerman}
+
+% Package für die Gentium Schriftart
+\usepackage{gentium}
+
+% Package für Quellen
+\usepackage[square,comma,numbers]{natbib}
+
+% Package für chapter style
+\usepackage{titlesec, xcolor}
+
+% Change Chapter Style
+\definecolor{gray75}{gray}{0.75}
+\definecolor{blue}{HTML}{2196f3}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{blue}{|}\hsp}{0pt}{\Huge\bfseries}
+
+% Package für URL
+\usepackage{url}
+
+% Package for managing Graphics
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{subfig}
+
+% Für Farben in Tabllen
+\usepackage{colortbl}
+
+\title{Poop-Face-Detection - Projektarbeit }
+\author{
+  Mirjam Lindner, Matr. Nr: 2701712, lindnermi60177@th-nuernberg.de \\
+  Johannes Büttner, Matr. Nr: 2635898, buettnerjo59694@th-nuernberg.de \\
+  Raphael Prechtel, Matr. Nr: 2660640, prechtelra59522@th-nuernberg.de \\
+  Jonas Malassa, Matr. Nr: 2644168, malassajo61773@th-nuernberg.de \\
+  }
+
+
+% Absatz
+\usepackage{parskip}
+
+% Package für leftbar
+\usepackage{framed}
+
+% Package für Landscape mode
+\usepackage{pdflscape}
+
+% Package for todo command  
+% \usepackage[disable]{todonotes} % notes not showed
+\usepackage[draft]{todonotes}  % notes showed
+
+% Package für lange Tabellen über mehrere Seiten
+\usepackage{longtable}
+% Package für Text in Formeln
+\usepackage{amsmath}
+
+% Begin des Dokuments
+\begin{document}
+
+% \listoftodos
+
+\maketitle
+\tableofcontents
+
+% Inputs 
+\input{includes/abstract}
+
+
+% Literaturverzeichnis einfügen
+\bibliography{quellen}
+\bibliographystyle{plainnat}
+
+%Anhang
+\appendix
+\include{includes/anhang}
+
+\end{document}
