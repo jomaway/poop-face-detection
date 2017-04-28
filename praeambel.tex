@@ -1,0 +1,57 @@
+\usepackage[T1]{fontenc}        % Umlaute für PDF Darstellung
+\usepackage[utf8]{inputenc}  % Umlaute von Tastatur einlesen (abhängig vom Betriebssystem!) kann auch auf ansinew oder z.B. utf8 umgestellt werden
+\usepackage[english,ngerman]{babel} % Trennregeln für Englisch und Deutsch
+\usepackage{LTXKursTitel}       % Eigenes Titelblatt
+\usepackage{scrpage2, scrtime}  % Pakete für Seitenlayout und Uhrzeit
+\usepackage{setspace}           % Paket für Zeilenabstand
+\usepackage[thinqspace]{SIunits}% Befehle für SI-Einheiten
+\usepackage{amsmath}            % Mathematik Befehle
+%\usepackage{blindtext}
+
+\usepackage{hyperref}           % Layout im PDF Viewer. Muss als letztes Paket geladen werden
+\hypersetup{%
+plainpages=false,
+linktocpage=true,
+breaklinks=true,
+colorlinks=true,
+linkcolor=black,%blue,
+anchorcolor=black,
+citecolor=black,%green,
+filecolor=black,%blue,
+urlcolor=black,%blue%
+pdfstartview={FitV},
+pdfview={FitH},
+pdfpagelayout={SinglePage},
+pdfpagemode={None},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%          Variablen zum Belegen              %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Variables for title page
+\DAAutor{
+  Mirjam Lindner (2701712), \\ %, lindnermi60177@th-nuernberg.de \\
+  Johannes Büttner (2635898), \\ %, buettnerjo59694@th-nuernberg.de \\
+  Raphael Prechtel (2660640), \\ %, prechtelra59522@th-nuernberg.de \\
+  Jonas Malassa (2644168)  %, malassajo61773@th-nuernberg.de 
+}
+\DATyp{Projektarbeit}
+\DAAutorAdresse{\par Nürnberg}
+\DAFachbereich{efi}
+\DATitel{Poop-Face-Detection System}
+\DABetreuer{Prof. Dr. Niebler}
+\DAOrt{Nürnberg}
+\DAAbgabedatum{01.\,September\,2017}
+
+% Variables for head- and footline
+% Date and time to be removed for final version
+\newcommand{\footlinetext}{\footnotesize \textsf{\color{gray}  Version vom \today\  \thistime  \normalsize}}
+\pagestyle{scrheadings}
+\ihead{\headmark}
+\chead{}
+\ohead{}
+\ifoot{\footlinetext}
+%\ifoot{}
+\cfoot{}
+\ofoot{\pagemark}

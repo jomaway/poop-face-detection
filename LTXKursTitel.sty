@@ -1,0 +1,147 @@
+% Muster-Stylefile, LaTeX-Kurs GSO Nürnberg, SS 2008
+% Dieses Package stellt eine Titelseite für eine Diplomarbeit
+% zur Verfügung. Das Design ist hierbei an die Vorgaben
+% der GSO angelehnt. Für die Vorgaben Ihres Fachbereiches
+% müssen evtl. Anpassungen unternommen werden!
+% Dieses Musterfile stellt weder Anspruch auf Vollständigkeit, noch ist es als Beispiel
+% für besonders gute TeX-Programmierung zu verstehen. Es soll lediglich eine Möglichkeit
+% aufzeigen, wie ein eigenes Stylefile aussehen kann.
+% Versionshistorie:
+% 1.0    2006/12/04(HB)    Erstausgabe für WS 2006/07
+% 2.0    2007/04/21(HB)    Überarbeitung und Designanpassung, SS 2007
+% 2.1    2008/05/25(HB)    Initialisierung der Variablen statisch, Fehlerabfrage bei Pflichtangaben
+%
+% Dieses File darf frei zur Gestaltung von akademischen Arbeiten an der GSO Nürnberg
+% verwendet werden. Eine Garantie für Übereinstimmung mit eventuellen Vorgaben
+% einzelner Fachbereiche wird nicht gegeben.
+% Kopieren und Modifikationen ausdrücklich gestattet.
+%
+%
+\NeedsTeXFormat{LaTeX2e} % Kompatibilität sicherstellen.
+\ProvidesPackage{LTXKursTitel}[2014/07/07 v2.2 Titelblatt LaTeX-Kurs GSO Nbg.]
+% Identifikation eines packages. Die Versionsinformation wird im logfile ausgegeben.
+% Der Dateiname und der obige Identifikationstext müssen übereinstimmen!
+\RequirePackage{calc}
+% Aufruf von anderen Packages in eigenen .sty-Files nicht mit usepackage.
+% \RequirePackage stellt sicher, daß das angefordere Package nicht bereits vorher u. U. mit anderen Optionen geladen wurde.
+\RequirePackage{ifthen} % für vereinfachte Konditionale
+\RequirePackage[absolute]{textpos} % Absolute Positionierung auf Seite
+\RequirePackage{graphicx,xcolor}
+
+% Layout
+% ------
+	\newlength{\RandLinks}	% Initialisierung der Längen
+	\newlength{\RandRechts}
+	\newlength{\RandOben}
+	\newlength{\TitelBreite}
+	%
+	\setlength{\RandLinks}{3cm}
+	\setlength{\RandRechts}{2cm}
+	% Berechnung der Breite des Titels aus den Randeinstellungen
+	\setlength{\TitelBreite}{\paperwidth-\RandLinks-\RandRechts}
+	%
+	\setlength{\RandOben}{2cm}
+%	
+% Die Werte können durch \setlength... im Dokument umdefiniert werden.
+
+% Statische Texte:
+% ----------------
+% Diese Variablen stellen statische Textelemente
+% der Titelei zur Verfügung. Vorbelegung mit den deutschen Begriffen
+\newcommand{\@DAFH}{Technische Hochschule Nürnberg Georg Simon Ohm}
+\newcommand{\@DAFB}{in~der~Fakultät}
+\newcommand{\@DABetreuerText}{Betreuer}
+
+% Falls Englisch als  Dokumentensprache gewählt ist:
+%\renewcommand{\@DAFH}{Georg-Simon-Ohm-University of Applied Sciences Nuremberg}
+%\renewcommand{\@DAFB}{at~the Faculty~of}
+%\renewcommand{\@DABetreuerText}{Advisor}
+%
+
+%Dynamische Texte :
+%------------------
+% Diese Texte werden zur Aufrufzeit verändert. Hierzu möchten
+% wir die gleiche Syntax wie in den Standardklassen verwenden
+% können, d. h. vor dem \maketitle im Dokument sollen mittels
+% \DAAutor{Max Mustermann} etc. die Werte gesetzt werden können.
+%
+% Die Definition der Kommandos passiert in 2 Schritten:
+% 1) Vorbelegung der Variablen mit "nix" = \relax
+\newcommand{\@DAAutor}{\relax}
+% 2) Beim Aufruf des Benutzerkommandos: Re-Definition des
+%    Platzhalters mit dem Argument des Benutzerbefehls.
+%    Achtung:
+%    \newcommand wirkt nur innerhalb der Gruppe,
+%    wir wollen aber ein globales Kommando definieren!
+% LaTeX-Syntax funktioniert hier wenn dann nur zufällig!
+% \newcommand{\Autor}[1]{\global\renewcommand\DAAutor[1]{#1}}
+% => TeX-Syntax - handle with care!
+%\newcommand{\DAAutor}[1]{\global\def\@DAAutor{#1}}
+\newcommand{\DAAutor}[1]{\gdef\@DAAutor{#1}}
+% \gdef macht (fast) dasselbe wie \newcommand, nur wirkt es 'g'lobal
+% Nur verwenden, wenn Sie sich sicher sind, was Sie tun!
+%
+% Analog werden die anderen Platzhalter definiert:
+\newcommand{\@DATyp}{Diplomarbeit} % hier mit Voreinstellung
+\newcommand{\DATyp}[1]{\gdef\@DATyp{#1}}
+
+\newcommand{\@DAAutorAdresse}{- Meine Adresse - }
+\newcommand{\DAAutorAdresse}[1]{\gdef\@DAAutorAdresse{#1}}
+%
+\newcommand{\@DAFachbereich}{AW}
+\newcommand{\DAFachbereich}[1]{\gdef\@DAFachbereich{#1}}
+%
+\newcommand{\@DATitel}{\relax}
+\newcommand{\DATitel}[1]{\gdef\@DATitel{#1}}
+%
+\newcommand{\@DABetreuer}{Musterbetreuer}
+\newcommand{\DABetreuer}[1]{\gdef\@DABetreuer{#1}}
+%
+\newcommand{\@DAOrt}{Nürnberg}
+\newcommand{\DAOrt}[1]{\gdef\@DAOrt{#1}}
+%
+\newcommand{\@DAAbgabedatum}{\today}
+\newcommand{\DAAbgabedatum}[1]{\gdef\@DAAbgabedatum{#1}}
+%
+\renewcommand{\maketitle}{% Neudefinition des \maketitle-Befehls:
+%
+% --------------------------------Für TeXperten!--------------------------------
+% Fehlerbehandlung: bei undefiniertem \@DAAutor wird ein Fehler mit einer
+% hoffentlich hilfreichen Beschreibung ausgegeben und die Erstellung ggf. abgebrochen.
+\ifthenelse{\equal{\@DAAutor}{\relax}}{% Fehler: kein Autor
+	\PackageError {LTXKursTitel}{Fehler beim Erstellen des Titelblatts - kein Autor definiert!\MessageBreak Bitte mit \noexpand\DAAutor\space vor \noexpand\maketitle\space definieren!}{Es wurde kein Autor definiert, bevor \noexpand\maketitle\space aufgerufen wurde.}%
+	}																					% Abbrechen mit Fehlermeldung
+	{\relax}%     kein Fehler: mach gar nix
+%	
+%% Gleiches Spiel mit dem Titel:	
+\ifthenelse{\equal{\@DATitel}{\relax}}{% Fehler: kein Autor
+	\PackageError {LTXKursTitel}{Fehler beim Erstellen des Titelblatts - kein Titel definiert!\MessageBreak Bitte mit \noexpand\DATitel\space vor \noexpand\maketitle\space definieren!}{Es wurde kein Titel definiert, bevor \noexpand\maketitle\space aufgerufen wurde.}%
+	}																					% Abbrechen mit Fehlermeldung
+	{\relax}%     kein Fehler: mach gar nix
+	
+% -------------------------------\Für TeXperten!--------------------------------
+%
+%	
+%
+	\thispagestyle{empty} % nötig, da sonst eine Seitenzahl ausgegeben wird
+%
+	\begin{textblock*}{\TitelBreite}(\RandLinks,\RandOben)% Textblock mit Breite \TitelBreite
+		\par\vspace{5mm}~\hfill\includegraphics[width=0.5\textwidth]{TH_Nuernberg_CMYK}\\[2mm]	% FH-Logo
+		{\color{blue}\rule{\TitelBreite}{2mm}}\\[3cm]					% Blaue Linie
+		{\centering
+		\sffamily\Large
+		\@DAFH\\[\baselineskip]																% Einsetzen der
+		\@DATyp{} \@DAFB{} \@DAFachbereich\\[3\baselineskip]	% einzelnen
+		{\Huge\@DATitel}\\[3\baselineskip]										% Textbausteine
+		\@DAAutor\\[2\baselineskip]
+		\@DAAutorAdresse\\[2\baselineskip]
+		\@DABetreuerText:~\@DABetreuer\\[2\baselineskip]
+		\@DAOrt, \@DAAbgabedatum\par
+		}%
+	\end{textblock*}
+	~\clearpage	% Seitenumbruch, das geschützte Leerzeichen ist notwendig,
+	            % da außer dem textblock* nichts auf der Seite steht und somit
+	            % die Seite als "`leer"' angesehen wird.
+} % Ende der Definition von \maketitle
+%
+% </package>

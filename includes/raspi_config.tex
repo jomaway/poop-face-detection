@@ -1,0 +1,81 @@
+\section{Einrichtung des Raspberry Pi}
+\label{sec:Einrichtung_Raspi}
+\subsection{Raspian}
+
+Als Betriebssystem wurde sich für das auf debian basierende Raspbian entschieden. Im folgenden wird kurz geschildert welche Schritte nötig sind um dies auf dem Raspberry Pi einzurichten.
+
+
+
+\begin{enumerate}
+  \item Download des Image unter raspberrypi.org (Version: Rasbian Jessi Pixel, da diese eine gui mitbringt, welche zum Prototyping von Vorteil ist.)
+  \item SD-Karte mittels lsdisk ermitteln (Müsste ähnlich wie /dev/mmcblk0 aussehen)
+  \item Image mittels dem Tool dd auf eine SD-Karte übertragen (Beispiel: dd if=/path/rasbian-image/2017-04-10-raspbian-jessie.img of=/dev/mmcblk0)
+  \item Damit auch genügend Speicherplatz für die Videos vorhanden ist muss die Größe der Partition erweitert werden. \\
+  \begin {enumerate}
+    \item fdisk /dev/mmcblk0
+    \item Mittels p alle Partitionen anzeigen lassen. \\ Man sieht hier 2 Partitionen eine kleine boot Partition und eine etwas größere Linux Partition. Von dieser 2ten   Partition müssen wir uns den StartSector notieren. 
+    \item Anschließend kann mittels d die zweite Partition gelöscht werden. 
+    \item Mittels n kann diese wieder erstellt werden. Hier bei startVektor das notierte ergebnis eingeben, sonst stimmt die partitionszuordnung nicht mehr. 
+    \item Als endvektor den standart wert übernehmen.
+    \item Danach mit w die änderungen auf die sdkarte schreiben.
+    \item Nach einem neustart muss man noch das Dateisystem mittels sudo resize2fs /dev/mmcblk0p2 anpassen.
+    \item Mit df -h sieht man nun das die neue größe der partition.
+    \item Link: http://www.fabiandeitelhoff.de/2014/07/raspberry-pi-speicherplatz-der-sd-karte-ausnutzen/
+  \end{enumerate}
+\end{enumerate}
+
+
+
+\subsection{Grundkonfiguration des Raspberry Pi}
+
+Link: https://www.elektronik-kompendium.de/sites/raspberry-pi/1906291.htm
+
+\paragraph{Hostname} \hspace{0pt} \\
+Der Hostname des Raspi wird auf poopface\_eval\_sys geändert
+\paragraph{Password}
+Das Passwort nach bedarf ändern %never save a Password in a git repo
+\paragraph{Interfaces} \hspace{0pt} \\
+Enable the SSH and the Camera interface
+\begin{itemize}
+  \item ssh
+  \item camera
+\end{itemize}
+
+\paragraph{Boot options} \hspace{0pt} \\
+boot to cli with autologin
+
+\paragraph{WLAN} \hspace{0pt}\\
+Um WLAN über eine Konsole einzurichten, muss man sich mittels su als root einloggen und folgende Schritte durchführen
+
+\begin{itemize}
+  \item iwlist wlan0 scan // scan all wifis to show ESSID:
+  \item wpa\_cli reconfigure /7 if not recorgnized automatically
+  \item ifconfig wlan0 up // if wlan is not up
+  \item ifconfig wlan0 // to get the address from which you can connect to via SSH.
+  \item delete \#psk="PASSWORD" line from /etc/wpa\_supplicant/wpa\_supplicant.conf
+\end{itemize}
+
+Link: https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
+
+\paragraph{Software and Updates} \hspace{0pt} \\
+Check for updates via sudo apt update \&\& sudo apt upgrade
+
+Installiere falls noch nicht vorhanden:
+- python3
+- python3-pip 
+\begin{itemize}
+  \item python3
+  \item python3-pip
+  \item TODO: alle abhängigkeiten für bluetooth hinzufügen
+\end{itemize}
+
+\section{SSH einrichten} \hspace{0pt} \\
+
+\begin{enumerate}
+  \item SSH key erstellen: (ssh-keygen -t rsa -b 4096)
+  \item Public key zu Github hinzufügen
+  \item von anderem rechner auf eval-pi via ssh verbinden: (ssh pi@IP-ADRESSE-VON-EVAL-PI)
+\end{enumerate}
+
+
+
