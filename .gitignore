@@ -1,9 +1,4 @@
 ## Folders
-listings/
-tikzuml-v1.0-2016-03-29/
-
-includes/apikey.tex
-*.*~
 
 
 ## Core latex/pdflatex auxiliary files:
@@ -22,7 +17,7 @@ includes/apikey.tex
 # these rules might exclude image files for figures etc.
 # *.ps
 # *.eps
-*.pdf
+#*.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
