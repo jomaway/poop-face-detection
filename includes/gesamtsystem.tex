@@ -1,0 +1,20 @@
+\section{Beschreibung des Gesamtsystems}
+\label{sec:Gesamtsystem}
+
+Die Aufgabe des Systems Poop-Face-Detection ist das Aufnehmen der Merkmale eines Babys, wenn es sich einnässt. Um Signale zu bekommen und zu verarbeiten, wird das Gesamtsystem in drei Komponenten unterteilt. Diese bestehen aus Sensoren, die die Feuchtigkeit sowie die Wärme einer Windel erkennen. Damit der Bewegungsraum des Kleinkindes gegeben ist, werden diese Signale an eine Verarbeitungseinheit übertragen. Eine Bluetooth-Kommunikation stellt die Schnittstelle zwischen Signaleingang und -auswertung dar. In den folgenden Untersektionen werden die Aufgaben der drei Einzelteile genauer beschrieben. Die Umsetzungen der einzelnen Teile können in den Kapiteln \ref{sec:eval_sys}, \ref{sec:sensor} und \ref{sec:com} nachvollzogen werden.
+
+\subsection{Aufgaben der Sensoren}
+
+Um eine frische Nässe in einer Windel erkennen zu können, müssen die Haupteigenschaften von Urin beachtet werden. Diese sind Feuchtigkeit und Wärme, welche sich gut mittels Sensoren bestimmen lassen. Damit hier die Aufgabe das Einlesen von Nässe und Temperatur. Die Werte sollen zur weiteren Verarbeitung zudem digitalisiert werden.
+
+\subsection{Aufgaben der Kommunikation}
+
+Da die Weiterverarbeitung der Daten wegen Verletzungsgefahr und anderen medizinischen Bedenken nicht unmittelbar an der Windel durchgeführt werden können, müssen die digitalisierten Informationen an ein Auswertungssystem übertragen werden. Diese Aufgabe übernimmt eine Bluetooth-Schnittstelle, welche die Verbindung zwischen den zwei anderen Komponenten darstellt.
+
+\subsection{Aufgaben des Evaluation-Systems}
+
+Zuletzt müssen die empfangenen Daten geprüft und verarbeitet werden. Die eingehende Bluetooth-Nachricht übermittelt zwei verschiedene Zustände, welche darüber entscheiden, ob Videomaterial von dem Baby abgespeichert wird oder nicht. Die Kameraaufnahmen beinhalten eine vom Benutzerdefinierte Zeit vor und nach dem Auslösen des Signals. Somit ist sicher, dass die Merkmale beim Einnässen eines Kleinkindes gegeben sind.
+
+
+
+
