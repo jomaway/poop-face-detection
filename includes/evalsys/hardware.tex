@@ -1,4 +1,4 @@
-\subsection{Hardware-Komponenten}
+\subsection{Komponenten}
 \label{subsec:evalsys_hardware}
 
 Die Auswertung des Poop-Face-Detection-Systems ist basierend auf einem Raspberry-PI. Dieser erfüllt die folgenden Anforderungen:
@@ -9,21 +9,24 @@ Die Auswertung des Poop-Face-Detection-Systems ist basierend auf einem Raspberry
 \item Webservereigenschaften
 \end{enumerate}
 
-Zur Videoaufnahme wird die "Raspberry PI Camera Modul v2" verwendet. Sie bietet einige Vor- und Nachteile des Systems.
+Zur Videoaufnahme wird die "Raspberry Pi Camera Modul V2" verwendet. Sie bietet einige Vor- und Nachteile des Systems. \\
 
 Nachteile:
 \begin{enumerate}
 \item Schwache Aufnahmen bei schlechten Lichtverhältnissen
 \item Kein Autofokus
 \end{enumerate}
+\vspace{0.35cm}
 
 Vorteile:
 \begin{enumerate}
 \item Hohe Auflösung (8 Mega-Pixel)
-\item Leichte Ansteuerung durch den Raspberry PI
+\item Leichte Ansteuerung durch den Raspberry Pi
 \item Günstig
 \end{enumerate}
 
-Für einen Prototypen eines Systems ist in erster Linie die Funktionalität wichtig. Daher sind in diesem Fall die Nachteile zu vernachlässigen. In zukünftigen Projekten, sollte jedoch darauf geachtet werden, in welchen Einsatzgebieten eine Kamera gut arbeitet sowie, dass die Aufnahmedaten einfach verarbeitet werden können.
+Für einen Prototypen eines Systems ist in erster Linie die Funktionalität wichtig. Daher sind in diesem Fall die Nachteile zu vernachlässigen. In zukünftigen Projekten, sollte jedoch darauf geachtet werden, in welchen Einsatzgebieten eine Kamera gut arbeitet sowie, dass die Aufnahmedaten einfach verarbeitet werden können.\cite{picam_website} \\
 
-Nicht nur bei der Kamera gibt es eine große Auswahl, sondern auch unter den Raspberry-PIs selbst gibt es Unterschiede. Daher wird die Version 3 verwendet, denn diese verfügt über eine Bluetooth-Schnittstelle, welche für die Funktion des Gesamtsystems gegeben sein muss. 
+Nicht nur bei der Kamera gibt es eine große Auswahl, sondern auch unter den geeigneten Kleinplatinenrechnern. Hier wird die Raspberry Pi Version 3 verwendet, denn diese verfügt über eine Bluetooth-Schnittstelle, welche für die Funktion des Gesamtsystems gegeben sein muss. Zudem ist bei diesem Model eine Kameraverbindungstelle auf dem Computerboard integriert. Die geschriebenen Programme sowie das Betriebssystem können auf einer Micro-SD-Karte abgespeichert werden.\cite{raspi_datenblatt}
+
+Als Betriebssystem wurde das auf debian basierende Raspbian verwendet, da es bereits eine Vielfalt an nötigen Werkzeugen mitbringt und eine einfache Nachinstallation von fehlender Software bietet. Eine ausführliche Installation des Raspberry Pi befindet sich unter \ref{sec:Einrichtung_Raspi}.
