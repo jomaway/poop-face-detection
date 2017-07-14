@@ -1,2 +1,35 @@
-\section{Kommunikation}
-\label{sec:com}
+\section{Hardware-Komponenten}
+\label{sec:hardware}
+
+Wie im Gesamtsystem beschrieben gibt es mehrere Komponenten. Zwei davon besitzen Hardware, welche hier genauer beschrieben werden.
+
+\subsection{Sensor}
+
+\subsection{Evaluation-System}
+
+Die Auswertung des Poop-Face-Detection-Systems ist basierend auf einem Raspberry-PI. Dieser erfüllt die folgenden Anforderungen:
+
+\begin{enumerate}
+\item Bluetooth-Kommunikation
+\item Videoaufnahme und -verarbeitung
+\item Webservereigenschaften
+\end{enumerate}
+
+Zur Videoaufnahme wird die "Raspberry PI Camera Modul v2" verwendet. Sie bietet einige Vor- und Nachteile des Systems.
+
+Nachteile:
+\begin{enumerate}
+\item Schwache Aufnahmen bei schlechten Lichtverhältnissen
+\item Kein Autofokus
+\end{enumerate}
+
+Vorteile:
+\begin{enumerate}
+\item Hohe Auflösung (8 Mega-Pixel)
+\item Leichte Ansteuerung durch den Raspberry PI
+\item Günstig
+\end{enumerate}
+
+Für einen Prototypen eines Systems ist in erster Linie die Funktionalität wichtig. Daher sind in diesem Fall die Nachteile zu vernachlässigen. In zukünftigen Projekten, sollte jedoch darauf geachtet werden, in welchen Einsatzgebieten eine Kamera gut arbeitet sowie, dass die Aufnahmedaten einfach verarbeitet werden können.
+
+Nicht nur bei der Kamera gibt es eine große Auswahl, sondern auch unter den Raspberry-PIs selbst gibt es Unterschiede. Daher wird die Version 3 verwendet, denn diese verfügt über eine Bluetooth-Schnittstelle, welche für die Funktion des Gesamtsystems gegeben sein muss. 
