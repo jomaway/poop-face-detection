@@ -1,2 +1,36 @@
 \section{Kommunikation}
 \label{sec:com}
+
+Dieses Kapitel geht im näheren auf die Kommunikation zwischen dem Sensor und dem Evaluation System ein. 
+..
+
+\subsection{Anforderungen}
+
+Die Kommunikation zwischen dem Sensor und dem Evaluation System ist ein wesentlicher Bestandteil des gesamten Projektes. Dabei formulierten wir einige Anforderungen auf die in diesem Abschnitt näher eingegangen werden soll. 
+
+\begin{description}
+  \item[Mobilität:]
+  Das System sollte so ausgelegt sein, dass die Eltern das Kind auch einfach aus dem Bett heben können ohne vorher Kabelverbindungen trennen zu müssen oder das Gefahr besteht das System dabei zu beschädigen. Daher soll eine kabellose Verbindung verwendet werden.
+  
+  \item[Einfach:]
+  Für die Entwicklung des Prototyps sollte die Kommunikation nicht zu Komplex gestalltet werden um die vorhandenen personellen Ressourcen nicht zu übersteigen. 
+  
+  \item[Energie sparend:]
+  Da der Sensor langfristig über einen Akku betrieben werden soll ist es nötig auf eine Energie sparende Technology zu setzen, damit der Akku nicht jeden Tag geladen werden muss.
+  
+  \item[Reichweite:]
+  Die maximale Reichweite muss ca 2-3 Meter betragen, wenn man den typischen Anwendungsfall betrachtet, dass das Kind in seinem Bett liegt und das Kamerasystem etwas darüber angebracht wird.
+  
+  \item[Erweiterbarkeit:]
+  Die wahl der Kommunikationstechnology sollte auch im Hinblick auf eine einfache Erweiterbarkeit in der Zukunft gewählt werden. Dabei betrachteten wir folgende Ideen:
+  \begin{itemize}
+    \item Direkte verbindung von einem Smartphone zum Sensor
+    \item Bau einer eigenen Platine zum Sensor 
+  \end{itemize}
+   
+\end{description}
+
+\subsection{Umsetzung}
+Aufgrund der oben gennanten Anforderungen setzten wir auf die Technology Bluetooth Low Energy (im folgenden mit BLE abgekürzt). Der Raspberry Pi V3 auf dem unser Evaluation System aufbaut bringt diese Schnittstelle von Haus aus mit und am Sensor kommt für unseren Prototyp ein HM10-Modul zum Einsatz. 
+
+
