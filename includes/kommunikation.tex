@@ -36,23 +36,28 @@ Aufgrund der oben gennanten Anforderungen setzten wir auf die Technology Bluetoo
 \subsubsection{BLE Grundlagen}
 \textcolor{red}{TODO: GRUNDLAGEN KAPITEL}
 
-\subsubsection{Unser Übertragungsprotokoll}
+\subsubsection{Übertragungsprotokoll}
 \label{subsubsec:unser_protokoll}
-- Übertragung des Zustandes DRY oder WET an das Eval System.
-- Im Moment keine übertragung in gegengesetzte richtung, aber evtl in zukunft vorstellbar ,
-um konfigurationen durchzuführen oder test durchzuführen. 
 
-- sendet in 10 sekunden abständen -> besseres debugging
- -> mehrmals WET senden falls eins verloren geht oder nicht erkannt wird
-- sendet von nur noch WET zuständen um weiter energie zu sparen.
+Neben der Festlegung auf BLE als Basistechnologie, stellt sich im Weiteren die Frage welche Informationen vom Sensor an das Evaluation System und in gegengesetze Richtung übertragen werden müssen. Betrachtet man die Funktionalität des Evaluation Systems wird schnell klar, dass der vom Sensor detektierte Zustandswechsel, von einer trockenen zu einer nassen Windel, die benötigte Information für einen ausfühbaren Prototyp ist. Im Rahmen dieser Arbeit wurde daher nicht auf weiter Überlegungen wie Konfiguration und Test des Sensors über Funk oder die Übertragung weiterer Daten und Informationen vom Sensor eingegangen. Um den Zustandswechsel der beiden Zustände, im folgenden mit DRY und WET bezeichnet, sicherzustellen gibt es mehrere Lösungsansätze. Anhand einiger Leitfragen soll auf diese und mögliche Fehlerquellen Bezug genommen werden.
 
-- verbesserungs für v2 -> nur noch senden wenn WET. 
- bzw in abständen von 5-10 min mal DRY um sicherzustellen das verbindung noch besteht. 
- (evlt kann man auch so erkennen das es besteht)
+\begin{itemize}
+  \item Wer detektiert den Zustandsübergang (Sensor oder Raspi)?
+  \item Wie kann man falsch bzw mehrfachdetektionen verhindern?
+  \item Wie kann man sicherstellen das gesendete Informationen auch angekommen sind?
+  \item Welche Kommunikationsabläufe sind am praktikabelsten?
+  \item Wie lässt sich das möglichst einfach realisieren?
+\end{itemize}
 
+Die erste Überlegung zur Implementierung war die Realisiertung eines Reqest-Response verfahrens. Diese ist zwar sehr leicht zu implementieren aber aus folgenden Gründen eher ungeeignet. 
+Da es unmöglich ist den Zeitpunkt des Zustandswechsels vorherzusagen, muss das Request Intervall sehr klein gewählt werden um keine Videoinformationen zu verlieren. Dies hat eine höhere Belastung für das System zu folge. 
+
+\paragraph{Die aktuelle Lösung} bassiert daher auf dem Indication Prinzip. Nachdem der Raspi die BLE Verbindung aufgebaut hat, wartet er, wie in \ref{fig:ble_com_pr} abgebildet, auf die Nachrichten vom Sensor und verarbeitet diese weiter. Der Sensor sendet alle 10 Sekunden den aktuellen Status (DRY oder WET) zum Evaluation System. Somit kann auf eine Confirmation verzichtet werden, da der Raspi für die Weiterverarbeitung verantwortlich ist. Dabei muss auch nur an einer Stelle überprüft werden ob fehler vorliegen. Ein weiterer Vorteil dieser Methode ist die schnelle Erfassung von Verbindungsfehlern während der Entwicklung.
+
+\paragraph{Verbesserungen:} Diese Lösung hat sich stark nach der letzten Leitfrage, der einfachen Realisierung, ausgerichtet. Dennoch sind dabei viele Aspekte diskutiert worden, die eine Verbesserung in einer nächsten Version darstellen würden. Eine wesentliche Verbesserung bezüglich der Energie Bilianz des Sensors wäre nur noch das senden von Zustandsänderungen, da somit wesentlich seltener eine übertragung stattfinden würde. Des weiteren stellt die Nutzung von BLE spezifischen Funktionen, wie das abonieren von Services und die Überprüfung von Verbindungsverlusten die Möglichkeit eines einfacheren Übertragungsprotokoll dar, da somit einige Fehlerursachen bereits von dieser Schicht abstrahiert werden.
 
 \subsubsection{Einrichtung Sensorseite}
-Im aktuellen Prototyp kommt ein HM10-BLE-Modul zum einsatz. Über eine Serielle Schnittstelle kann das Modul konfiguriert und genutzt werden. Dies bietet einige Vorteile. Das Modul kommt in der Regel als Slave vorkonfiguriert und kann als solches direkt verwendet werden. Dabei werden alle Nachrichten die man an die Serielle Schnittstelle sendet auf den BLE Service mit der ID "FFEE"\textcolor{red}{(TODO: überprüfen)} gemapped und über diese versendet. In der Gegenrichtung werden äquivalent alle empfangenen Nachrichten über die Serielle Schnittstelle ausgegeben. Dies ermöglicht eine einfache Nutzung der Bluetooth Low Energy Technology für kleine Projekte, da man sich nicht tiefgreifend mit dem Protokoll auseinander setzen muss. Dabei wird aber auch der Nachteil sichtbar. So ist es nicht Möglich eigene BLE Services zu definieren. Dies ist jedoch für unseren Anwendungsbereich nicht von bedeutung. 
+Im aktuellen Prototyp kommt ein HM10-BLE-Modul zum einsatz. Über eine Serielle Schnittstelle kann das Modul konfiguriert und genutzt werden. Dies bietet einige Vorteile. Das Modul kommt in der Regel als Slave vorkonfiguriert und kann als solches direkt verwendet werden. Dabei werden alle Nachrichten die man an die Serielle Schnittstelle sendet auf den BLE Service mit der ID "FFEE"\textcolor{red}{(TODO: überprüfen)} gemapped und über diese versendet. In der Gegenrichtung werden äquivalent alle empfangenen Nachrichten über die Serielle Schnittstelle ausgegeben. Dies ermöglicht eine einfache Nutzung der Bluetooth Low Energy Technology für kleine Projekte, da man sich nicht tiefgreifend mit dem Protokoll auseinander setzen muss. Dabei wird aber auch der Nachteil sichtbar. So ist es nicht Möglich eigene BLE Services zu definieren. Dies ist jedoch für unseren Anwendungsbereich nicht weiter von bedeutung. 
 
 Die Konfiguration des HM10 Moduls erfolgt über sogenannte AT-Kommandos \footnote{\textcolor{red}{TODO:} }, welche ursprünglich zur Konfiguration von Modems entwickelt wurde. Eine Liste mit allen verfügbaren Kommandos ist unter \textcolor{red}{TODO } zu finden. Beim Kauf eines solchen Modules sollte man allerdings darauf zu achten, dass man kein Plagiat bekommt, da diese in ihrer Funktionalität oftmals eingeschränkt sind \textcolor{red}{(TODO: ref)}. Eine Möglichkeit herauszufinden, ob man ein solches bekommen hat bietet ein Projekt von \textcolor{red}{(TODO: name)} welches unter \textcolor{red}{(TODO: githublink einfügen)} zu finden ist.
 
@@ -67,7 +72,7 @@ Wird eine Platine für den Sensor entwickelt, besteht die Möglichkeit, weiterhi
 Wie weiter oben bereits erwähnt, besitzt der Raspberry Pi in der Version 3 bereits einen BLE Chip. Dadurch wird keine weiter Hardware benötigt. Auf dem Raspi läuft das Linux Betriebsystem Raspbian, welches den Bluetooth Stack bluez mitbringt. Da die implementierung der Gatt Profile auf dem Evaluation System einige Probleme mit sich bringt, wird im nächsten Abschnitt zunächst auf diese eingegangen.
 
 \paragraph{Probleme}. \\ 
-Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im allgemeinen. Während BLE bereits in vielen Projekten im Sensor-, Embedded- und Mobilbereich eingesetzt wird, ist der Einsatz auf einem klassischen Betriebsystem weniger von bedeutung \textcolor{red}{(TODO: quelle raussuchen?)}. Dadurch sind kaum brauchbare Dokumentationen und Tutorials zu diesem Thema zu finden. Zwar liefert der BLE Stack bluez seit einiger Zeit eine Implementierung für BLE anwendungen mit, jedoch gilt auch hier, wie bei vielen Open Source Projekten, der Quellcode ist die Dokumentation. Dadurch ist die Hürde für Einsteiger sehr hoch. Ein im Rahmen dieses Projekt entstandenes Papers "Bluetooth Low Energy Programming on Linux"  \textcolor{red}{TODO: ref einfügen}, welches im  \textcolor{red}{TODO:ref  Anhang X} beiliegt, beschreibt den Einstieg in die BLE programmierung unter linux, daher wird hier nicht näher darauf eingegangen. 
+Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im allgemeinen. Während BLE bereits in vielen Projekten im Sensor-, Embedded- und Mobilbereich eingesetzt wird, ist der Einsatz auf einem klassischen Betriebsystem weniger von bedeutung \textcolor{red}{(TODO: quelle raussuchen?)}. Dadurch sind kaum brauchbare Dokumentationen und Tutorials zu diesem Thema zu finden. Zwar liefert der BLE Stack bluez seit einiger Zeit eine Implementierung für BLE anwendungen mit, jedoch ist hier wie bei vielen Open Source Projekten, der Quellcode die einzige Dokumentation. Dadurch ist die Hürde für Einsteiger sehr hoch. Ein im Rahmen dieses Projekt entstandenes Papers "Bluetooth Low Energy Programming on Linux"  \textcolor{red}{TODO: ref einfügen}, welches im  \textcolor{red}{TODO:ref  Anhang X} beiliegt, beschreibt den Einstieg in die BLE programmierung unter linux, daher wird hier nicht näher darauf eingegangen. 
 
 \paragraph{Implementierung}. \\
 
