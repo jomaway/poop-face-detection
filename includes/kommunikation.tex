@@ -76,6 +76,28 @@ Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im allgemein
 
 \paragraph{Implementierung}. \\
 
+Da die Viedeoverarbeitung und der Rest unserer Software in Python realisiert sind, setzten wir hier ebenfalls auf eine Pythonlib . Während der Test verschiedener Bibliotheken \footnote{\textcolor{red}{TODO:ein paar aufzählen}} war Gattlib die einzigste, mit der sich unser Übertragungsprotokoll, wie in Kapitel \ref{subsubsec:unser_protokoll} beschrieben, problemlos implementieren lies. 
+
+\begin{lstlisting}[language=Python, caption=Requester Class zur Verarbeitung der einkommenden Daten ]
+class Requester(GATTRequester):
+    def __init__(self, wakeup, *args):
+        GATTRequester.__init__(self, *args)
+        self.wakeup = wakeup
+        self.nap_state = "D"
+
+    def on_notification(self, handle, data):
+        data = re.sub('[^\w]', '', data)
+        #ser_data = serialize_msg(data)
+        print("[C] - notification on handle: {}\n".format(data))
+        if(data[0] == 'W' and self.nap_state == 'D'):
+            print("[C] - napkin wet")
+            os.system("python3 create_trigger_file.py")
+            
+        self.nap_state = data[0]
+        self.wakeup.set()
+\end{lstlisting}
+\label{lst:eval_com_gattlib}
+
 - Dateistruktur.
 - Gattlib
 - Ablauf : Detektieren des Signals -> Erkennen ob neues Signal oder wieder holung des alten
