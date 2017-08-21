@@ -6,30 +6,18 @@
 \usepackage{setspace}           % Paket für Zeilenabstand
 \usepackage[thinqspace]{SIunits}% Befehle für SI-Einheiten
 \usepackage{amsmath}            % Mathematik Befehle
-%\usepackage{blindtext}
-
-\usepackage{hyperref}           % Layout im PDF Viewer. Muss als letztes Paket geladen werden
-\hypersetup{%
-plainpages=false,
-linktocpage=true,
-breaklinks=true,
-colorlinks=true,
-linkcolor=black,%blue,
-anchorcolor=black,
-citecolor=black,%green,
-filecolor=black,%blue,
-urlcolor=black,%blue%
-pdfstartview={FitV},
-pdfview={FitH},
-pdfpagelayout={SinglePage},
-pdfpagemode={None},
-}
 
 % make an easy \todo command 
 % which will display a red text
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
-% for the use of listings 
+% package to include pdf pages
+\usepackage{pdfpages}
+
+% package for using graphics
+\usepackage{graphicx}
+
+% package for the use of listings 
 \usepackage{listings}
 \usepackage{color}
 
@@ -58,6 +46,24 @@ pdfpagemode={None},
 }
  
 \lstset{style=ownlststyle}
+
+\usepackage{hyperref}           % Layout im PDF Viewer. Muss als letztes Paket geladen werden
+\hypersetup{%
+plainpages=false,
+linktocpage=true,
+breaklinks=true,
+colorlinks=true,
+linkcolor=black,
+anchorcolor=black,
+citecolor=black,%green,
+filecolor=black,%blue,
+urlcolor=blue,
+pdfstartview={FitV},
+pdfview={FitH},
+pdfpagelayout={SinglePage},
+pdfpagemode={None},
+}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
