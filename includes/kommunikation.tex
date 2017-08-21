@@ -34,7 +34,18 @@ Die Kommunikation zwischen dem Sensor und dem Evaluation System ist ein wesentli
 Aufgrund der oben gennanten Anforderungen setzten wir auf die Technology Bluetooth Low Energy (im folgenden mit BLE abgekürzt). Der Raspberry Pi V3 auf dem unser Evaluation System aufbaut bringt diese Schnittstelle von Haus aus mit und am Sensor kommt für unseren Prototyp ein HM10-Modul zum Einsatz. BLE ist ein auf energiesparende Systeme ausgelegtes, drahtloses Netwerkprotokol. Mit einer Reichweite von 10 Meter \cite{ble_spec} bietet es genügend Spielraum für unseren Anwendungsbereich. Im folgenden wird zuerst kurz auf die Grundlagen von Bluetooth Low Energy eingegangen und anschließend die Einrichtung und damit verbundenen Probleme diskutiert. 
 
 \subsubsection{BLE Grundlagen}
-\todo{GRUNDLAGEN KAPITEL}
+\label{subsubsec:ble_gl}
+Da Bluetooth Low Energy (BLE) als Übertragung eingesetzt wird, soll hier kurz die Funktionsweise erläutert werden. Alle weiteren Informationen zu BLE und seinen technischen Spezifikationen sind auf \url{https://www.bluetooth.com/} zu finden. 
+
+%BLE in a second
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.6\textwidth]{includes/kom/graphics/ble_connection}
+	\caption{Kommunikationsprinzip von BLE}
+	\label{fig:ble_comm}
+\end{figure}
+
+Ein Bluetooth Low Energy Gerät kann verschiedene Rollen~\footnote{Rollen nach der BLE Spezifikation sind: Central, Peripheral, Broadcaster und Observer} einnehmen. Ein Gerät das als Peripheral fungiert, bietet ein oder mehrere Services, wie z.B. Daten messen, an. Diese werden wiederum von den sogenannten Characteristics implementiert. Alle Services die ein Gerät anbietet, werden zu einem Profil zusammengefasst, welches per Broadcast~\footnote{Ein Broadcast ist eine Nachricht, bei der Datenpakete von einem Punkt aus an alle Teilnehmer eines Nachrichtennetzes übertragen werden. } ausgesendet wird (siehe Abb~\ref{fig:ble_comm}). Ein als Central arbeitendes Gerät, wie in unserem Fall das Evaluation System, kann dann eine Verbindung zu diesem Gerät aufbauen und einen Service in Anspruch nehmen in dem es das gewünschte Characteristic abonniert.Anschließend werden ihm die verfügbaren Daten zugesendet. 
 
 \subsubsection{Übertragungsprotokoll}
 \label{subsubsec:unser_protokoll}
@@ -66,7 +77,7 @@ Da es unmöglich ist den Zeitpunkt des Zustandswechsels vorherzusagen, muss das 
 \subsubsection{Einrichtung Sensorseite}
 Im aktuellen Prototyp kommt ein HM10-BLE-Modul zum einsatz. Über eine Serielle Schnittstelle kann das Modul konfiguriert und genutzt werden. Dies bietet einige Vorteile. Das Modul kommt in der Regel als Slave vorkonfiguriert und kann als solches direkt verwendet werden. Dabei werden alle Nachrichten die man an die Serielle Schnittstelle sendet auf den BLE Service mit der ID "FFEE"\todo{ überprüfen)} gemapped und über diese versendet. In der Gegenrichtung werden äquivalent alle empfangenen Nachrichten über die Serielle Schnittstelle ausgegeben. Dies ermöglicht eine einfache Nutzung der Bluetooth Low Energy Technology für kleine Projekte, da man sich nicht tiefgreifend mit dem Protokoll auseinander setzen muss. Dabei wird aber auch der Nachteil sichtbar. So ist es nicht Möglich eigene BLE Services zu definieren. Dies ist jedoch für unseren Anwendungsbereich nicht weiter von bedeutung. 
 
-Die Konfiguration des HM10 Moduls erfolgt über sogenannte AT-Befehlen \footnote{Ursprünglich zur Kommunikation mit Modems entwickelter Befehlssatz}, welche ursprünglich zur Konfiguration von Modems entwickelt wurde. Eine Liste mit verfügbaren Kommandos ist unter \url{http://blog.blecentral.com/2015/05/05/hm-10-peripheral/} zu finden. Beim Kauf eines solchen Moduls sollte man allerdings darauf zu achten, dass man kein Plagiat bekommt, da diese in ihrer Funktionalität oftmals eingeschränkt sind. Eine Möglichkeit herauszufinden, ob man ein solches bekommen hat bietet ein Projekt von \textit{ayavilevich} welches unter \href{https://github.com/ayavilevich/arduino-ble-ident-n-set}{Github} zu finden ist.
+Die Konfiguration des HM10 Moduls erfolgt über sogenannte AT-Befehlen \footnote{Ursprünglich zur Kommunikation mit Modems entwickelter Befehlssatz}, welche ursprünglich zur Konfiguration von Modems entwickelt wurde. Eine Liste mit verfügbaren Kommandos ist unter \url{http://blog.blecentral.com/2015/05/05/hm-10-peripheral/} zu finden. Beim Kauf eines solchen Moduls sollte man allerdings darauf zu achten, dass man kein Plagiat bekommt, da diese in ihrer Funktionalität oftmals eingeschränkt sind. Eine Möglichkeit herauszufinden, ob man ein solches bekommen hat bietet ein Projekt von \textit{ayavilevich} welches auf seinem \href{https://github.com/ayavilevich/arduino-ble-ident-n-set}{Github-Account} zu finden ist.
 
 \paragraph{Impementierung}
 Um die Bedienung für das Sensorteam so einfach wie möglich zu gestallten, wurde eine C Bibliothek entwickelt, welche die Kommunikation mit dem Modul regelt. Diese stellt zwei Funktionen wie im Listing \ref{lst:bleSerial_methods} angezeigt zu Verfügung. Dabei wird die send() Methode, durch einen Interrupt Timer, zyklisch alle 10 Sekunden wie im abschnitt \ref{subsubsec:unser_protokoll} beschrieben aufgerufen. Detektiert der Sensor eine nasse Windel muss nur der Status, mittels der Funktion setState() auf "WET" umgeschaltet werden.
@@ -90,47 +101,29 @@ Wird eine Platine für den Sensor entwickelt, besteht die Möglichkeit, weiterhi
 Wie weiter oben bereits erwähnt, besitzt der Raspberry Pi in der Version 3 bereits einen BLE Chip. Dadurch wird keine weiter Hardware benötigt. Auf dem Raspi läuft das Linux Betriebssystem Raspbian, welches den Bluetooth Stack bluez mitbringt. Da die Implementierung der GATT Profile auf dem Evaluation System einige Probleme mit sich bringt, wird im nächsten Abschnitt zunächst auf diese eingegangen.
 
 \paragraph{Probleme}. \\ 
-Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im allgemeinen. Während BLE bereits in vielen Projekten im Sensor-, Embedded- und Mobilbereich eingesetzt wird, ist der Einsatz auf einem klassischen Betriebssystem weniger von Bedeutung. Dadurch sind kaum brauchbare Dokumentationen und Tutorials zu diesem Thema zu finden. Zwar liefert der BLE Stack bluez seit einiger Zeit eine Implementierung für BLE Anwendungen mit, jedoch ist hier wie bei vielen Open Source Projekten, der Quellcode die einzige Dokumentation. Dadurch ist die Hürde für Einsteiger sehr hoch. Ein im Rahmen dieses Projekt entstandenes Papers "Bluetooth Low Energy Programming on Linux", welches im Anhang \ref{sec:paper_ble} beiliegt, beschreibt den Einstieg in die BLE Programmierung unter Linux. Daher wird hier nicht näher darauf eingegangen. 
+Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im allgemeinen. Während BLE bereits in vielen Projekten im Sensor-, Embedded- und Mobilbereich eingesetzt wird, ist der Einsatz auf einem klassischen Betriebssystem weniger von Bedeutung. Dadurch sind kaum Dokumentationen und Tutorials zu diesem Thema zu finden. Zwar liefert der Bluetooth Stack bluez seit einiger Zeit eine Implementierung für BLE Anwendungen mit, jedoch ist hier wie bei vielen Open Source Projekten, der Quellcode die einzige Dokumentation. Dadurch ist die Hürde für Einsteiger sehr hoch. Ein im Rahmen dieses Projekt entstandenes Papers "Bluetooth Low Energy Programming on Linux", welches im Anhang \ref{sec:paper_ble} beiliegt, beschreibt den Einstieg in die BLE Programmierung unter Linux. Daher wird hier nicht näher darauf eingegangen. 
 
 \paragraph{Implementierung}. \\
+Da die Videoverarbeitung und der Rest unserer Software in Python realisiert sind, setzten wir hier ebenfalls auf eine Pythonlib . Während der Test verschiedener Bibliotheken\footnote{wie bluepy, gatt-python, Adafruit Python BluefruitLE} war pygattlib\footnote{Bitbucket page: \url{https://bitbucket.org/OscarAcena/pygattlib}} die einzigste, mit der sich unser Übertragungsprotokoll, wie in Kapitel \ref{subsubsec:unser_protokoll} beschrieben, problemlos implementieren lies. Pygattlib lässt sich einfach über pip\footnote{ \textbf{P}ip \textbf{I}nstalls \textbf{P}ython und ist eine Paketverwaltung für Python-Module. } installieren und liefert einige nützliche Beispiele mit. Listing \ref{lst:pygattlib_ex} zeigt wie man eingehende BLE Nachrichten empfangen und weiter verarbeiten kann. 
 
-Da die Videoverarbeitung und der Rest unserer Software in Python realisiert sind, setzten wir hier ebenfalls auf eine Pythonlib . Während der Test verschiedener Bibliotheken \footnote{\todo{ein paar aufzählen}} war Gattlib die einzigste, mit der sich unser Übertragungsprotokoll, wie in Kapitel \ref{subsubsec:unser_protokoll} beschrieben, problemlos implementieren lies. Listing \ref{lst:requester} zeigt einen Ausschnitt 
+\begin{lstlisting}[language=Python, caption=pygattlib: Receive notifications example, label=lst:pygattlib_ex]
+  from gattlib import GATTRequester
 
-\begin{lstlisting}[language=Python, caption=Requester Class zur Verarbeitung der einkommenden Daten, label=lst:requester]
 class Requester(GATTRequester):
-    def __init__(self, wakeup, *args):
-        GATTRequester.__init__(self, *args)
-        self.wakeup = wakeup
-        self.nap_state = "D"
-
     def on_notification(self, handle, data):
-        data = re.sub('[^\w]', '', data)
-        #ser_data = serialize_msg(data)
-        print("[C] - notification on handle: {}\n".format(data))
-        if(data[0] == 'W' and self.nap_state == 'D'):
-            print("[C] - napkin wet")
-            os.system("python3 create_trigger_file.py")
-            
-        self.nap_state = data[0]
-        self.wakeup.set()
+        print("- notification on handle: {}\n".format(handle))
 \end{lstlisting}
 
-- Dateistruktur. 
-- Gattlib
-- Ablauf : Detektieren des Signals -> Erkennen ob neues Signal oder wieder holung des alten
-  -> triggerfile erstellen.
-  
+Der Parameter \textit{data} beinhaltet den Inhalt der gesendeten Daten. Durch eine Auswertung dieser Daten wird der Statuswechsel des Sensors erkannt und die vom Videosystem benötigte Triggerdatei erzeugt. Siehe dazu Abbildung \ref{fig:ble_com_pr} und Kapitel \todo{ref einfügen} Triggererkennung. \\
 
-\begin{figure}
+Um sich mit dem Sensor zu verbinden muss das pythonscript receive\_notification.py gestartet werden. Befindet sich der Sensor nicht in Reichweite oder bricht die BLE Verbindung ab muss das Programm neu gestartet werden. Eine Fehlerbehandlung in diesem Fall wäre ein sinnvoller Schritt für die nächste Version. Einen vereinfachten Überblick über die verwendete Struktur des Kommunikationsteils auf dem Raspberry Pi stellt Abbildung \ref{fig:classdiagram_connection} dar. Dabei sind die Orangen markierten Klassen aus der oben erwähnten Bibliothek pygattlib.
+
+\begin{figure}[h]
   \centering
-  \includegraphics{includes/kom/graphics/gatt_classDiagram2}
+  \includegraphics[width=0.6\textwidth]{includes/kom/graphics/gatt_classDiagram2}
   \caption{Klassendiagramm des Verbindungsprogramm auf dem Evaluation System}
   \label{fig:classdiagram_connection}
 \end{figure}
-
-
-\subparagraph{Zusammenspiel mit Aufnahemsystem}
-\todo{label für triggersystem auf kapitel eval sys}
 
 
 \subsection{Fazit}
