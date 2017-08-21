@@ -34,7 +34,18 @@ Die Kommunikation zwischen dem Sensor und dem Evaluation System ist ein wesentli
 Aufgrund der oben gennanten Anforderungen setzten wir auf die Technology Bluetooth Low Energy (im folgenden mit BLE abgekürzt). Der Raspberry Pi V3 auf dem unser Evaluation System aufbaut bringt diese Schnittstelle von Haus aus mit und am Sensor kommt für unseren Prototyp ein HM10-Modul zum Einsatz. BLE ist ein auf energiesparende Systeme ausgelegtes, drahtloses Netwerkprotokol. Mit einer Reichweite von 10 Meter \cite{ble_spec} bietet es genügend Spielraum für unseren Anwendungsbereich. Im folgenden wird zuerst kurz auf die Grundlagen von Bluetooth Low Energy eingegangen und anschließend die Einrichtung und damit verbundenen Probleme diskutiert. 
 
 \subsubsection{BLE Grundlagen}
-\todo{GRUNDLAGEN KAPITEL}
+\label{subsubsec:ble_gl}
+Da Bluetooth Low Energy (BLE) als Übertragung eingesetzt wird, soll hier kurz die Funktionsweise erläutert werden. Alle weiteren Informationen zu BLE und seinen technischen Spezifikationen sind auf \url{https://www.bluetooth.com/} zu finden. 
+
+%BLE in a second
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.6\textwidth]{includes/kom/graphics/ble_connection}
+	\caption{Kommunikationsprinzip von BLE}
+	\label{fig:ble_comm}
+\end{figure}
+
+Ein Bluetooth Low Energy Gerät kann verschiedene Rollen~\footnote{Rollen nach der BLE Spezifikation sind: Central, Peripheral, Broadcaster und Observer} einnehmen. Ein Gerät das als Peripheral fungiert, bietet ein oder mehrere Services, wie z.B. Daten messen, an. Diese werden wiederum von den sogenannten Characteristics implementiert. Alle Services die ein Gerät anbietet, werden zu einem Profil zusammengefasst, welches per Broadcast~\footnote{Ein Broadcast ist eine Nachricht, bei der Datenpakete von einem Punkt aus an alle Teilnehmer eines Nachrichtennetzes übertragen werden. } ausgesendet wird (siehe Abb~\ref{fig:ble_comm}). Ein als Central arbeitendes Gerät, wie in unserem Fall das Evaluation System, kann dann eine Verbindung zu diesem Gerät aufbauen und einen Service in Anspruch nehmen in dem es das gewünschte Characteristic abonniert.Anschließend werden ihm die verfügbaren Daten zugesendet. 
 
 \subsubsection{Übertragungsprotokoll}
 \label{subsubsec:unser_protokoll}
