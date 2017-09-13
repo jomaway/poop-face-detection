@@ -1,11 +1,81 @@
-\subsection{Komponenten}
+\subsection{Software Komponenten} \
 \label{subsec:evalsys_software}
 
-Die Software beinhaltet mehrere Teilbereiche von dem Erkennen eines Triggers bis zur Ablage des vollständigen Videos.
+Die Software beinhaltet mehrere Teilbereiche von dem Erkennen eines Triggers bis zur Ablage des vollständigen Videos. Durch recherche über Wildbewegungskameras konnten einige Bereiche der Videoaufnahme erleichtert werden \todo{Referenz auf Internetseite von Programmcode}.
 
 \subsubsection{Videoaufnahme}
 
+Für die Ansteuerung der Raspberry Pi Kamera gibt es bereits eine Bibliothek die folgendermaßen eingebunden werden kann:
+
+\begin{lstlisting}[language=Python]
+from picamera import PiCamera
+from picamera import PiCameraCircularIO
+\end{lstlisting}
+
+Somit kann die Kamera erkannt werden und Einstellungen vorgenommen werden.
+
+\begin{lstlisting}[language=Python]
+with PiCamera() as camera:
+	camera.framerate = 25
+	stream = PiCameraCircularIO(camera, seconds=(conf.get_secs_before() + conf.get_secs_after()))
+	camera.start_recording(stream, format='h264')
+	try:
+		while True:
+			camera.wait_recording(1)	
+		finally:
+			camera.stop_recording()
+\end{lstlisting}
+
+Im obigen Code wird die Bilderanzahl pro Sekunde eingestellt. Danach wird ein Ringpuffer initialisiert, der die Puffergröße von den Sekunden vor und nach einem Trigger hat. Damit sind die Grundeinstellungen durchgeführt und die Kamera kann mit dem Befehl \glqq{} camera.start\_recording \grqq{} aufnehmen. Dem Aufnahmestart wird dabei der Ringpuffer, sowie ein unterstütztes Videoformat übergeben.
+
+Danach werden Triggersuche sowie Videoverarbeitung im Zyklus von einer Sekunde der durchlaufen. Die Wartezeit wird mittels der Aufnahme- und Warten-Funktion der Kamera realisiert. Am Ende des Programmes muss die Kameraaufnahme mit dem Befehl "`camera.stop\_recording"' beendet werden.
+
 \subsubsection{Triggererkennung}
 
-Durch das Empfangen und Verifizieren des Bluetooth-Signals wird eine Triggerdatei mit der Endung ".trg" im Ordner recording/trigger erzeugt. Dies ist genauer in \ref{sec:kommunikation} beschrieben.
+Durch das Empfangen und Verifizieren des Bluetooth-Signals wird eine Triggerdatei mit der Endung ".trg" im Ordner recording/trigger erzeugt. Dies ist genauer in \ref{sec:com} beschrieben.
 
+Der Name der Datei wird folgendermaßen dargestellt:
+\begin{center}
+	jahr\_monat\_tag-stunde\_minute\_sekunde.trg
+\end{center}
+
+Mit folgender Codezeile wird nach Triggerdateien im oben genannten Verzeichnis gesucht:
+
+\begin{lstlisting}[language=Python]
+triggerfiles = [f for f in os.listdir(conf.get_trigger_path()) if f.endswith(conf.get_trigger_fileextension())]
+\end{lstlisting}
+
+Der Systembefehl "`os.listdir"' listet alle Dateien eines Ordners auf. Der Pfad wird in den runden Klammern danach angegeben. In diesem Fall wird der Verzeichnispfad über eine get-Methode der Konfigurationsdatei ausgelesen, welcher auf den Ordner recording/trigger verweist. Um eine Triggerdatei zu finden werden nur die Dateien mit der Endung "`.trg"' aufgelistet. Dies wird mit der "`if"' (wenn)-Bedingung nach dem Systembefehl ausgeführt. Die Dateiendung wird ebenfalls über die Konfigurationsdatei (conf) bezogen.
+
+Sobald Triggerdateien erkannt wurden, werden diese bearbeitet. Über die Benennung wird der Triggerzeitpunkt ermittelt. Falls die Triggerzeit größer als die aktuelle Zeit sein sollte, wird als Zeitpunkt die aktuelle Zeit verwendet.
+
+\subsubsection{Videoverarbeitung}
+
+Da bereits ein Trigger erkannt wurde und der Zeitpunkt des Auslösens bekannt ist, kann mit der Videoverarbeitung begonnen werden.
+
+\begin{lstlisting}[language=Python]
+beforetime = (currenttime - triggertime).total_seconds() + conf.get_secs_before()
+\end{lstlisting}
+
+Die Länge des Videos ist über eine für den Nutzer erstellte Konfigurationsdatei einstellbar gemacht. Dafür wird die Zeit in Sekunden ermittelt, die für den Videoabschnitt vor dem Triggersignal benötigt wird. Danach wird dieser Teil als Abschnitt A im Videoformat "`h264"' abgespeichert.
+
+Hiermit ist das bisherige Videomaterial vor dem Trigger gesammelt und die Triggerdatei kann gelöscht werden. Das funktioniert mittels eines Systembefehls "`os.remove"'. Nun nimmt die Kamera die Sekunden nach dem Triggerzeitpunkt auf. Diese Aufnahme wird in "`h264"'-Format als Teil B gespeichert.
+
+Da das "`h264"'-Format für die Anzeige auf einer Webapplikation nicht geeignet ist, muss diese in ein anderes Format umgewandelt werden. Dies passiert über ein weiteres Python-Programm, welches über einen Systembefehl angesteuert wird.
+
+Mittels eines Systembefehle und dem Programm "`MP4Box"' können die Videoabschnitte konvertiert, zusammengefügt und in das Zielverzeichnis der Webapplikation verschoben werden \todo{Referenz auf Internetseite}. Zuletzt werden die zwei nicht mehr benötigten Teilabschnitte gelöscht.
+
+\subsubsection{Konfigurationsdatei}
+
+Für das Python-Programm wurden zwei Konfigurationsdateien erstellt. Eine für den Benutzer zugängliche und festgelegte.
+Die Nutzerkonfiguration besteht aus dem Zeitwert der Videoaufnahme vor dem Triggersignal in Sekunden und dem danach.
+Die festgelegte Konfigurationsdatei beinhaltet Pfadnamen sowie Endungen von Trigger-, Video- und Loggerverzeichnissen und -dateien.
+
+Das Auslesen der Informationen erfolgt über "`configurator.py"'. Dieser liest die einzelnen Elemente der Textdatei aus und kann diese mittels definierter get-Funktionen als Rückgabewert an ein anderes Programm übergeben.
+
+Um dieses Python-Programm verwenden zu können muss der Konfigurationsparser wie folgt eingebunden werden:
+
+\begin{lstlisting}[language=Python]
+from poopfacedetection import configurator
+conf = configurator.Configurator()
+\end{lstlisting}
