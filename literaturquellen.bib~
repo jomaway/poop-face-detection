@@ -16,9 +16,20 @@
   url = "https://www.elektronik-kompendium.de/sites/kom/1805171.htm",
 }
 
-%@paper{paper_ble_linux,
-%  author = "Jonas Malassa",
-%  title  = "Bluetooth Low Energy Programming on Linux",
-%  year    = "2017"  
-%}
+@paper{paper_ble_linux,
+  author = "Jonas Malassa",
+  title  = "Bluetooth Low Energy Programming on Linux",
+  year    = "2017"  
+}
   
+@online{rasp_ansteuerung,
+  author = "Helmut Karger",
+  title = "Raspberry Video Kamera",
+  url = "http://blog.helmutkarger.de",
+}
+
+@online{convert_video,
+author="",
+title="My MP4Box GUI 0.6.0.6",
+url"https://www.videohelp.com/software/My-MP4Box-GUI",
+}
