@@ -98,4 +98,19 @@ Der Webserver liegt im Verzeichnis /webapp und kann dort über das script run.sh
 Die Webseite ist so aufgebaut, dass die aufgenommenen Videos nach dem Verarbeiten nur in den Ordner webapp/static/videos kopiert werden müssen. Auf eine optische Gestalltung und weitere Möglichkeiten der Konfiguration des Evaluation-Systems über den Webserver wurde bewusst verzichtet, da der Fokus dieser Arbeit auf die anderen Teile gelegt wurde.
 
 \subsubsection{Aktuelle Probleme}
-\todo{noch schreiben}
+\label{subsubsec:software_problems}
+
+Da während der Lösungsfindung Probleme aufgetaucht sind, wird im Folgenden auf diese eingegangen und eine Möglichkeit zur Vermeidung beschrieben.
+
+\paragraph{Ausführung als superuser:} Um die Programme ausführen zu können, sind Systemrechte erforderlich. Da bei der Ansteuerung der Kamera und des BLE Chips auf Systemfunktionen zugegriffen wird. Eine alternative Lösung dafür ist die Vergabe von den entsprechenden Rechten an den aktuellen Anwender.
+
+\paragraph{Ausführung im richtigen Verzeichnis:} Damit die Programme funktionieren, müssen sie aus dem entsprechenden Verzeichnis aufgerufen werden, da Links sonst fehlinterpretiert werden können. Um dieses Problem zu lösen, wurden absolute Pfadangaben in der Konfigurationsdatei hinterlegt. Eine Lösung die auf relativen Pfaden basiert, wäre für die Portabilität des Projektes nützlicher.
+
+\paragraph{Abspielen der Videos:} Zum Abspielen der Videos muss von einem anderen Rechner auf die Webseite zugegriffen werden, da mit dem vorinstallierten Browser des Raspberry Pi's das Abspielen der Videos nicht problemlos funktioniert. 
+
+\subsubsection{Benutzung}
+\label{subsubsec:using}
+
+Um die Benutzbarkeit des Systems zu vereinfachen, wurde ein Shell-Skript run.sh erstellt, welches sich um die Ausführung der benötigten Python-Programme kümmert. Dieses liegt im Verzeichnis home/pi/poop-face-detection/eval-sys/. Dort wurde auch eine README-Datei mit weiteren Information zur Benutzung hinterlegt.
+
+Ist die IP-Adresse des Raspberry Pi bekannt, ist auch eine Verbindung über SSH möglich.
