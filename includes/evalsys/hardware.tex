@@ -1,15 +1,15 @@
 \subsection{Hardware Komponenten}
 \label{subsec:evalsys_hardware}
 
-Die Auswertung des Poop-Face-Detection-Systems ist basierend auf einem Raspberry-PI. Dieser erfüllt die folgenden Anforderungen:
+Die Auswertung des Poop-Face-Detection-Systems ist basierend auf einem Raspberry-PI realisiert. Dieser erfüllt die folgenden Anforderungen:
 
 \begin{enumerate}
 \item Bluetooth-Kommunikation
 \item Videoaufnahme und -verarbeitung
-\item Webservereigenschaften
+\item Bereitstellen eines Webservers
 \end{enumerate}
 
-Zur Videoaufnahme wird die "Raspberry Pi Camera Modul V2" verwendet. Sie bietet einige Vor- und Nachteile des Systems. \\
+Zur Videoaufnahme wird die \glqq{}Raspberry Pi Camera Modul V2\grqq{}  verwendet. Sie bietet einige Vor- und Nachteile. Die wichtigsten sind hier aufgelistet. Weitere Informationen sind unter \href{https://www.raspberrypi.org/products/camera-module-v2/}{raspberrypi.org} zu finden. \\
 
 Nachteile:
 \begin{enumerate}
@@ -25,7 +25,7 @@ Vorteile:
 \item Günstig
 \end{enumerate}
 
-Für einen Prototypen eines Systems ist in erster Linie die Funktionalität wichtig. Daher sind in diesem Fall die Nachteile zu vernachlässigen. In zukünftigen Projekten, sollte jedoch darauf geachtet werden, in welchen Einsatzgebieten eine Kamera gut arbeitet sowie, dass die Aufnahmedaten einfach verarbeitet werden können.\cite{picam_webseite} \\
+Für einen Prototypen eines Systems ist in erster Linie die Funktionalität wichtig. Daher sind in diesem Fall die Nachteile zu vernachlässigen. In zukünftigen Projekten, sollte jedoch darauf geachtet werden, in welchen Einsatzgebieten eine Kamera gut arbeitet sowie, dass die Aufnahmedaten einfach verarbeitet werden können. \\
 
 Nicht nur bei der Kamera gibt es eine große Auswahl, sondern auch unter den geeigneten Kleinplatinenrechnern. Hier wird die Raspberry Pi Version 3 verwendet, denn diese verfügt über eine Bluetooth-Schnittstelle, welche für die Funktion des Gesamtsystems gegeben sein muss. Zudem ist bei diesem Model eine Kameraverbindungstelle auf dem Computerboard integriert. Die geschriebenen Programme sowie das Betriebssystem können auf einer Micro-SD-Karte abgespeichert werden.\cite{raspi_datenblatt}
 

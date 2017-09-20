@@ -2,45 +2,16 @@
 \label{sec:verhaltensformular}
 
 Damit die Videos ausgewertet werden können, wurde ein Verhaltensformular erstellt. Dieses Formular lehnt sich an generelle Ausdrucksweisen von Babies an.
-Die Auswertung kann in späteren Projekten ausgeführt werden.
+Die Auswertung kann in späteren Projekten ausgeführt werden.\\
 
 Das Formular wird auf der Webapplikation unterhalb des Videos eingeblendet und enthält die wichtigsten Merkmale. Diese Anzeichen können durch den ganzen Körper oder durch konkrete Bewegungen ersichtlich sein. Daher sind als \dq wichtigste Merkmale \dq das Gesamtverhalten \dq ruhig \dq und \dq unruhig \dq ausgewählt. Falls das nicht zutrifft, kann man in das darunter liegende Textfeld das Gesamtverhalten des Babies eingetragen werden.
 
+\begin{figure}[]
+	\centering
+		\includegraphics[width=0.8\textwidth]{includes/evalsys/graphics/verhaltensformular}
+	\caption{Verhaltensformular zur analyse des Verhaltens des Babies}
+	\label{fig:verhaltensformular}
+\end{figure}
 
-% Hier soll ein Bild von dem Formular sein
-
-
-Um die Anzeichen genauer zu spezifizieren, sind weitere Eigenschaften aufgeführt, die ohne Ton erkannt werden können. Diese können aus der Abbildung entnommen werden.
-
-% die Abbildung muss noch referenziert werden
-
-Um die eingegebenen Daten auf dem Server zu speichern, wurde ein Speicherknopf implementiert.
-
-
-Das Auslesen und Speichern der Daten des Formulars funktioniert mittels der POST-Methode. Diese greift auf den aktuellen Zustand der angegebenen Textfelder, Radiobuttons und Checkbuttons zu.
-
-\begin{lstlisting}[language=Python, caption=webapp: verhaltensformular]
-@app.route('/video/<day>', methods=['GET', 'POST'])
-def day_view(day):	
-	form = BehaviourForm()
-	if request.method == 'POST' and form.validate():
-		b_file = open(VIDEO_PATH+ '/../behaviour/' +day+'.txt', 'w')
-		b_file.write('wm = '+str(form.wm.data)+'\n')
-		b_file.write('wm_andere = '+str(form.pipipi.data)+'\n')
-		b_file.write('strampeln = '+str(form.strampeln.data)+'\n')
-		b_file.write('zappeln = '+str(form.zappeln.data)+'\n')
-		b_file.write('blub = '+str(form.blub.data)+'\n')
-		b_file.write('gesicht = '+str(form.gesicht.data)+'\n')
-		b_file.write('kopf = '+str(form.kopf.data)+'\n')
-		b_file.write('lach = '+str(form.lach.data)+'\n')
-		b_file.write('krum = '+str(form.krum.data)+'\n')
-		b_file.write('andere = '+str(form.andere.data)+'\n')
-		b_file.write('andere_n = '+str(form.andere_n.data)+'\n')
-		b_file.write('notiz = '+str(form.notiz.data)+'\n')
-		b_file.close()
-		return render_template('form_saved.html');
-		
-	return render_template('day_view.html', day=day, form=form)
-\end{lstlisting}
-
-Der Pythoncode zeigt das Schreiben der Zustände in eine Textdatei. Nach dem Speichern wird auf eine andere Seite weitergeleitet und somit die Speicherung der Daten bestätigt.
+Um die Anzeichen genauer zu spezifizieren, sind weitere Eigenschaften aufgeführt, die ohne Ton erkannt werden können. Diese können aus der Abbildung \ref{fig:verhaltensformular} entnommen werden.\\
+Um die eingegebenen Daten auf dem Server zu speichern, wurde ein Speicherknopf implementiert. Das Auslesen und Speichern der Daten des Formulars funktioniert mittels der POST-Methode. Diese greift auf den aktuellen Zustand der angegebenen Textfelder, Radiobuttons und Checkbuttons zu.

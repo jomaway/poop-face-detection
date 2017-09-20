@@ -1,28 +1,28 @@
 \section{Kommunikation}
 \label{sec:com}
 
-Dieses Kapitel geht im näheren auf die Kommunikation zwischen dem Sensor und dem Evaluation System ein. 
+Dieses Kapitel geht im näheren auf die Kommunikation zwischen dem Sensor und dem Evaluation-System ein. 
 
 
 \subsection{Anforderungen}
 
-Die Kommunikation zwischen dem Sensor und dem Evaluation System ist ein wesentlicher Bestandteil des gesamten Projektes. Im nächsten Abschnitt wird näher auf die Anforderungen dieser eingegangen.
+Die Kommunikation zwischen dem Sensor und dem Evaluation-System ist ein wesentlicher Bestandteil des gesamten Projektes. Im nächsten Abschnitt wird näher auf die Anforderungen eingegangen.
 
 \begin{description}
   \item[Mobilität:]
-  Das System soll so ausgelegt sein, dass die Eltern das Kind auch einfach aus dem Bett heben können ohne vorher Kabelverbindungen trennen zu müssen oder das Gefahr besteht das System dabei zu beschädigen. Daher soll eine kabellose Verbindung verwendet werden.
+  Das System soll so ausgelegt sein, dass die Eltern das Kind auch einfach aus dem Bett heben können, ohne vorher Kabelverbindungen trennen zu müssen oder dass die Gefahr besteht das System dabei zu beschädigen. Daher soll eine kabellose Verbindung verwendet werden.
   
   \item[Einfachheit:]
-  Für die Entwicklung des Prototyps sollte die Kommunikation nicht zu Komplex gestalltet werden um die vorhandenen personellen Ressourcen nicht zu übersteigen. 
+  Für die Entwicklung des Prototyps sollte die Kommunikation nicht zu Komplex gestaltet werden, um die vorhandenen personellen Ressourcen nicht zu übersteigen. 
   
   \item[Energie sparend:]
-  Da der Sensor langfristig über einen Akku betrieben werden soll, ist es nötig auf eine Energie sparende Technology zu setzen, damit der Akku nicht jeden Tag geladen werden muss.
+  Da der Sensor langfristig über einen Akku betrieben werden soll, ist es nötig auf eine energiesparende Technologie zu setzen, damit der Akku nicht jeden Tag geladen werden muss.
   
   \item[Reichweite:]
-  Die maximale Reichweite muss ca 2-3 Meter betragen, wenn man den typischen Anwendungsfall betrachtet, dass ein Kind in seinem Bett liegt und das Kamerasystem etwas darüber angebracht wird.
+  Die Reichweite muss ca 2-3 Meter betragen, wenn man den typischen Anwendungsfall betrachtet, dass ein Kind in seinem Bett liegt und das Kamerasystem etwas darüber angebracht wird.
   
   \item[Erweiterbarkeit:]
-  Die wahl der Kommunikationstechnology sollte auch im Hinblick auf eine einfache Erweiterbarkeit in der Zukunft gewählt werden. Dabei betrachten wir folgende Ideen:
+  Die Wahl der Kommunikationstechnologie sollte auch im Hinblick auf eine einfache Erweiterbarkeit in der Zukunft gewählt werden. Dabei werden folgende Ideen betrachtet:
   \begin{itemize}
     \item Direkte Verbindung von einem Smartphone zum Sensor
     \item Bau einer eigenen Platine zum Sensor 
@@ -31,7 +31,7 @@ Die Kommunikation zwischen dem Sensor und dem Evaluation System ist ein wesentli
 \end{description}
 
 \subsubsection{Gewählte Lösung}
-Aufgrund der oben gennanten Anforderungen setzten wir auf die Technology Bluetooth Low Energy (im folgenden mit BLE abgekürzt). BLE ist ein auf energiesparende Systeme ausgelegtes, drahtloses Netwerkprotokol. Mit einer Reichweite von 10 Meter \cite{ble_spec} bietet es genügend Spielraum für unseren Anwendungsbereich. Der Raspberry Pi V3 auf dem unser Evaluation System aufbaut bringt diese Schnittstelle von Haus aus mit und am Sensor kommt für unseren Prototyp ein HM10-Modul zum Einsatz. Im folgenden wird zuerst kurz auf die Grundlagen von Bluetooth Low Energy eingegangen und anschließend die Einrichtung und damit verbundenen Probleme diskutiert. 
+Aufgrund der oben genannten Anforderungen wird auf die Technologie Bluetooth Low Energy (im folgenden mit BLE abgekürzt) gesetzt. BLE ist ein auf energiesparende Systeme ausgelegtes, drahtloses Netwerkprotokoll. Mit einer Reichweite von 10 Metern \cite{ble_spec} bietet es genügend Spielraum für diesen Anwendungsbereich. Der Raspberry Pi V3 auf dem das Evaluation-System aufbaut, bringt diese Schnittstelle bauartbedingt mit und am Sensor kommt für den Prototyp ein HM10-Modul zum Einsatz. Im folgenden wird zuerst kurz auf die Grundlagen von Bluetooth Low Energy eingegangen und anschließend die Einrichtung und damit verbundenen Probleme diskutiert. 
 
 \subsection{BLE Grundlagen}
 \label{subsubsec:ble_gl}
@@ -45,23 +45,23 @@ Da Bluetooth Low Energy (BLE) als Übertragung eingesetzt wird, soll hier kurz d
 	\label{fig:ble_comm}
 \end{figure}
 
-Ein Bluetooth Low Energy Gerät kann verschiedene Rollen~\footnote{Rollen nach der BLE Spezifikation sind: Central, Peripheral, Broadcaster und Observer} einnehmen. Ein Gerät das als Peripheral fungiert, bietet ein oder mehrere Services, wie z.B. Daten messen, an. Diese werden wiederum von den sogenannten Characteristics implementiert. Alle Services die ein Gerät anbietet, werden zu einem Generic Attribute Profil (GATT) zusammengefasst, welches per Broadcast~\footnote{Ein Broadcast ist eine Nachricht, bei der Datenpakete von einem Punkt aus an alle Teilnehmer eines Nachrichtennetzes übertragen werden. } ausgesendet wird (siehe Abb~\ref{fig:ble_comm}).Ein als Central arbeitendes Gerät, wie in unserem Fall das Evaluation System, kann nun eine Verbindung zu diesem Gerät aufbauen und einen Service in Anspruch nehmen in dem es das gewünschte Characteristic abonniert. Anschließend werden ihm die verfügbaren Daten zu gesendet. Bei einer BLE-Verbindung spricht man auch von Master und Slave. Das Gerät welches die Verbindung initiiert hat ist der Master, das andere Gerät der Slave.
+Ein Bluetooth Low Energy Gerät kann verschiedene Rollen~\footnote{Rollen nach der BLE Spezifikation sind: Central, Peripheral, Broadcaster und Observer} einnehmen. Ein Gerät das als \glqq{}Peripheral\grqq{} fungiert, bietet ein oder mehrere Services, wie z.B. Daten messen, an. Diese werden wiederum von den sogenannten  \glqq{}Characteristics\grqq{} implementiert. Alle Services die ein Gerät anbietet, werden zu einem Generic Attribute Profil (GATT) zusammengefasst, welches per Broadcast~\footnote{Ein Broadcast ist eine Nachricht, bei der Datenpakete von einem Punkt aus an alle Teilnehmer eines Nachrichtennetzes übertragen werden. } ausgesendet wird (siehe Abb~\ref{fig:ble_comm}).Eine als \glqq{}Central\grqq{} arbeitende Komponente, wie in diesem Fall das Evaluation-System, kann nun eine Verbindung zum Gerät aufbauen und einen Service in Anspruch nehmen, in dem es das gewünschte \glqq{}Characteristic\grqq{} abonniert. Anschließend werden ihm die verfügbaren Daten zu gesendet. Bei einer BLE-Verbindung spricht man auch von Master und Slave. Das Gerät, welches die Verbindung initiiert hat, ist der Master, das andere Gerät der Slave.
 
 \subsection{Übertragungsprotokoll}
 \label{subsubsec:unser_protokoll}
 
-Neben der Festlegung auf BLE als Basistechnologie, stellt sich im Weiteren die Frage welche Informationen vom Sensor an das Evaluation System und in gegengesetze Richtung übertragen werden müssen. Betrachtet man die Funktionalität des Evaluation Systems wird schnell klar, dass der vom Sensor detektierte Zustandswechsel, von einer trockenen zu einer nassen Windel, die benötigte Information für einen ausfühbaren Prototyp ist. Im Rahmen dieser Arbeit wurde daher nicht auf weiter Überlegungen wie Konfiguration und Test des Sensors über Funk oder die Übertragung weiterer Daten und Informationen vom Sensor eingegangen. Um den Zustandswechsel der beiden Zustände, im folgenden mit DRY und WET bezeichnet, sicherzustellen gibt es mehrere Lösungsansätze. Anhand einiger Leitfragen soll auf diese und mögliche Fehlerquellen Bezug genommen werden.
+Neben der Festlegung auf BLE als Basistechnologie, stellt sich im Weiteren die Frage welche Informationen vom Sensor an das Evaluation-System und in entgegengesetzte Richtung übertragen werden müssen. Betrachtet man die Funktionalität des Evaluation-Systems wird schnell klar, dass der vom Sensor detektierte Zustandswechsel, von einer trockenen zu einer nassen Windel, die benötigte Information für einen ausführbaren Prototyp ist. Im Rahmen dieser Arbeit wurde daher nicht auf weitere Überlegungen, wie Konfiguration und Test des Sensors über Funk oder die Übertragung weiterer Daten und Informationen vom Sensor, eingegangen. Um den Zustandswechsel der beiden Zustände, im folgenden mit \glqq{}DRY\grqq{} und \glqq{}WET\grqq{} bezeichnet, sicherzustellen, gibt es mehrere Lösungsansätze. Anhand einiger Leitfragen soll auf diese und mögliche Fehlerquellen Bezug genommen werden.
 
 \begin{itemize}
   \item Wer detektiert den Zustandsübergang (Sensor oder Raspi)?
-  \item Wie kann man falsch bzw. mehrfachdetektionen verhindern?
-  \item Wie kann man sicherstellen das gesendete Informationen auch angekommen sind?
+  \item Wie kann man Falsch- bzw. Mehrfachdetektionen verhindern?
+  \item Wie kann man sicherstellen, dass gesendete Informationen auch angekommen sind?
   \item Welche Kommunikationsabläufe sind am praktikabelsten?
   \item Wie lässt sich das möglichst einfach realisieren?
 \end{itemize}
 
-Die erste Überlegung zur Implementierung war die Realisiertung eines Reqest-Response Verfahrens. Diese ist zwar sehr leicht zu implementieren aber aus folgenden Gründen eher ungeeignet. 
-Da es unmöglich ist den Zeitpunkt des Zustandswechsels vorherzusagen, muss das Request Intervall sehr klein gewählt werden um keine Videoinformationen zu verlieren. Dies hat eine höhere Belastung für das System zu folge. 
+Die erste Überlegung zur Implementierung war die Realisierung eines Request-Response Verfahrens. Dieses ist zwar sehr leicht zu implementieren, aber aus folgenden Gründen eher ungeeignet. 
+Da es unmöglich ist den Zeitpunkt des Zustandswechsels vorherzusagen, muss das Request Intervall sehr klein gewählt werden um keine Videoinformationen zu verlieren. Dies hat eine höhere Belastung für das System zur Folge. 
 
 \begin{figure}[h]
   \centering
@@ -70,17 +70,17 @@ Da es unmöglich ist den Zeitpunkt des Zustandswechsels vorherzusagen, muss das 
   \label{fig:ble_com_pr}
 \end{figure}
 
-\paragraph{Die aktuelle Lösung} basiert daher auf dem Indication Prinzip. Nachdem der Raspi die BLE Verbindung aufgebaut hat, empfängt er, wie in \ref{fig:ble_com_pr} abgebildet, die Nachrichten vom Sensor und verarbeitet diese weiter. Der Sensor sendet alle 10 Sekunden den aktuellen Status (DRY oder WET) zum Evaluation System. Somit kann auf eine Confirmation verzichtet werden, da der Raspi für die Weiterverarbeitung verantwortlich ist. Dabei muss auch nur an einer Stelle überprüft werden ob Fehler vorliegen. Ein weiterer Vorteil dieser Methode ist die schnelle Erfassung von Verbindungsfehlern während der Entwicklung. Dadurch haben wir zwar auch bei diesem Ansatz ein relativ kleines Übertragungsintervall, allerdings bietet die gewählte Struktur eine gute Grundlage für Verbesserungen.
+\paragraph{Die aktuelle Lösung} basiert daher auf dem Indication Prinzip. Nachdem der Raspi die BLE Verbindung aufgebaut hat, empfängt er, wie in \ref{fig:ble_com_pr} abgebildet, die Nachrichten vom Sensor und verarbeitet diese weiter. Der Sensor sendet alle 10 Sekunden den aktuellen Status (\glqq{}DRY\grqq{} oder \glqq{}WET\grqq{}) zum Evaluation-System. Somit kann auf eine Confirmation verzichtet werden, da der Raspi für die Weiterverarbeitung verantwortlich ist. Dabei muss nur an einer Stelle überprüft werden, ob Fehler vorliegen. Ein weiterer Vorteil dieser Methode ist die schnelle Erfassung von Verbindungsfehlern während der Entwicklung. Dadurch gibt es auch bei diesem Ansatz ein relativ kleines Übertragungsintervall, allerdings bietet die gewählte Struktur eine gute Grundlage für Verbesserungen.
 
-\paragraph{Verbesserungen:} Diese Lösung hat sich stark nach der letzten Leitfrage, der einfachen Realisierung, ausgerichtet. Dennoch sind dabei viele Aspekte diskutiert worden, die eine Verbesserung in einer nächsten Version darstellen würden. Eine wesentliche Verbesserung bezüglich der Energie Bilanz des Sensors wäre nur noch das senden von Zustandsänderungen, da somit wesentlich seltener eine Übertragung stattfinden würde. Des weiteren stellt die Nutzung von BLE spezifischen Funktionen, wie das abonnieren von Services und die Überprüfung von Verbindungsverlusten die Möglichkeit eines einfacheren Übertragungsprotokoll dar, da somit einige Fehlerursachen bereits von dieser Schicht abstrahiert werden.
+\paragraph{Verbesserungen:} Diese Lösung hat sich stark nach der letzten Leitfrage, der einfachen Realisierung, ausgerichtet. Dennoch sind dabei viele Aspekte diskutiert worden, die eine Verbesserung in einer nächsten Version darstellen können. Eine wesentliche Verbesserung bezüglich der Energiebilanz des Sensors wäre nur noch das Senden von Zustandsänderungen, da somit wesentlich seltener eine Übertragung stattfinden würde. Des weiteren stellt die Nutzung von BLE spezifischen Funktionen, wie das abonnieren von Services und die Überprüfung von Verbindungsverlusten die Möglichkeit eines einfacheren Übertragungsprotokoll dar, da somit einige Fehlerursachen bereits von dieser Schicht abstrahiert werden.
 
 \subsection{Umsetzung auf dem Sensor}
-Im aktuellen Prototyp kommt ein HM10-BLE-Modul zum Einsatz. Über eine Serielle Schnittstelle kann das Modul konfiguriert und genutzt werden. Dies bietet einige Vorteile. Das Modul kommt in der Regel als Slave vorkonfiguriert und kann als solches direkt verwendet werden. Dabei werden alle Nachrichten die man an die Serielle Schnittstelle sendet auf den BLE Service mit der ID "FFEE"\todo{ überprüfen)} gemapped und über diese versendet. In der Gegenrichtung werden äquivalent alle empfangenen Nachrichten über die Serielle Schnittstelle ausgegeben. Dies ermöglicht eine einfache Nutzung der Bluetooth Low Energy Technology für kleine Projekte, da man sich nicht tiefgreifend mit dem Protokoll auseinander setzen muss. Dabei wird aber auch der Nachteil sichtbar. So ist es nicht Möglich eigene BLE Services zu definieren. Dies ist jedoch für unseren Anwendungsbereich nicht weiter von Bedeutung. 
+Im aktuellen Prototyp kommt ein HM10-BLE-Modul zum Einsatz. Über eine serielle Schnittstelle kann das Modul konfiguriert und genutzt werden. Dies bietet einige Vorteile. Das Modul kommt in der Regel als Slave vorkonfiguriert und kann als solches direkt verwendet werden. Dabei werden alle Nachrichten die man an die Serielle Schnittstelle sendet auf den BLE Service mit der ID "FFE1" gemapped und über diese versendet. In der Gegenrichtung werden äquivalent alle empfangenen Nachrichten über die serielle Schnittstelle ausgegeben. Dies ermöglicht eine einfache Nutzung der Bluetooth Low Energy Technologie für kleine Projekte, da man sich nicht tiefgreifend mit dem Protokoll auseinander setzen muss. Dabei wird aber auch der Nachteil sichtbar. So ist es nicht möglich eigene BLE Services zu definieren. Dies ist jedoch für diesen Anwendungsbereich nicht weiter von Bedeutung. 
 
-Die Konfiguration des HM10 Moduls erfolgt über sogenannte AT-Befehlen \footnote{Ursprünglich zur Kommunikation mit Modems entwickelter Befehlssatz}, welche ursprünglich zur Konfiguration von Modems entwickelt wurde. Eine Liste mit verfügbaren Kommandos ist unter \url{http://blog.blecentral.com/2015/05/05/hm-10-peripheral/} zu finden. Beim Kauf eines solchen Moduls sollte man allerdings darauf zu achten, dass man kein Plagiat bekommt, da diese in ihrer Funktionalität oftmals eingeschränkt sind. Eine Möglichkeit herauszufinden, ob man ein solches bekommen hat bietet ein Projekt von \textit{ayavilevich} welches auf seinem \href{https://github.com/ayavilevich/arduino-ble-ident-n-set}{Github-Account} zu finden ist. \footnote{Um illegale Nachmachen nicht zu unterstützen, sollte man diese Geräte wieder zurückschicken} 
+Die Konfiguration des HM10 Moduls erfolgt über sogenannte AT-Befehlen \footnote{Ursprünglich zur Kommunikation mit Modems entwickelter Befehlssatz}, welche ursprünglich zur Konfiguration von Modems entwickelt wurde. Eine Liste mit verfügbaren Kommandos ist unter \url{http://blog.blecentral.com/2015/05/05/hm-10-peripheral/} zu finden. Beim Kauf eines solchen Moduls sollte man allerdings darauf achten, dass man kein Plagiat bekommt, da diese in ihrer Funktionalität oftmals eingeschränkt sind. Eine Möglichkeit herauszufinden, ob man ein solches bekommen hat bietet ein Projekt von \textit{ayavilevich} welches auf seinem \href{https://github.com/ayavilevich/arduino-ble-ident-n-set}{Github-Account} zu finden ist. \footnote{Um illegale Nachmachen nicht zu unterstützen, sollte man diese Geräte wieder zurückschicken} 
 
 \subsubsection{Implementierung}
-Um die Bedienung für das Sensorteam so einfach wie möglich zu gestalten, wurde eine C Bibliothek entwickelt, welche die Kommunikation mit dem Modul regelt. Diese stellt zwei Funktionen wie im Listing \ref{lst:bleSerial_methods} angezeigt zu Verfügung. Dabei wird die send() Methode, durch einen Interrupt Timer, zyklisch alle 10 Sekunden wie im abschnitt \ref{subsubsec:unser_protokoll} beschrieben aufgerufen. Detektiert der Sensor eine nasse Windel muss nur der Status, mittels der Funktion setState() auf \glqq{} WET \grqq{}  umgeschaltet werden.
+Um die Bedienung für das Sensorteam so einfach wie möglich zu gestalten, wurde eine C Bibliothek entwickelt, welche die Kommunikation mit dem Modul regelt. Diese stellt zwei Funktionen wie im Listing \ref{lst:bleSerial_methods} angezeigt zu Verfügung. Dabei wird die send() Methode, durch einen Interrupt Timer alle 10 Sekunden zyklisch, wie im Abschnitt \ref{subsubsec:unser_protokoll} beschrieben, aufgerufen. Detektiert der Sensor eine nasse Windel muss nur der Status, mittels der Funktion setState() auf \glqq{} WET \grqq{}  umgeschaltet werden.
 
 \begin{lstlisting}[language=C, caption=send und setState Methoden aus der BleSerial bibliothek, label=lst:bleSerial_methods ]
 void BleSerial::setState(enum NapState state){
@@ -94,17 +94,17 @@ void BleSerial::send(){
 
 Der komplette Code ist auf \href{https://github.com/jomaway/poop-face-detection_sensor/tree/master/arduino/libraries/BleSerial}{Github}  zu finden. \\
 
-Wird eine Platine für den Sensor entwickelt, besteht die Möglichkeit, weiterhin ein HM10-Modul an den Mikrocontroller anzuschließen oder einen Chip mit integriertem BLE zu verwenden und dort den gleichen Service zu implementieren. In beiden Fällen muss an der Implementierung vom Evaluation System, welche im Kapitel \ref{subsubsec:ble_raspi} beschrieben wird, nichts geändert werden.
+Wird eine Platine für den Sensor entwickelt, besteht die Möglichkeit, weiterhin ein HM10-Modul an den Mikrocontroller anzuschließen oder einen Chip mit integriertem BLE zu verwenden und dort den gleichen Service zu implementieren. In beiden Fällen muss an der Implementierung vom Evaluation-System, welche im Kapitel \ref{subsubsec:ble_raspi} beschrieben wird, nichts geändert werden.
 
 \subsection{Umsetzung auf dem Raspberry Pi}
 \label{subsubsec:ble_raspi}
-Wie weiter oben bereits erwähnt, besitzt der Raspberry Pi in der Version 3 bereits einen BLE Chip. Dadurch wird keine weiter Hardware benötigt. Auf dem Raspi läuft das Linux Betriebssystem Raspbian, welches den Bluetooth Stack bluez mitbringt. Da die Implementierung der GATT Profile auf dem Evaluation System einige Probleme mit sich bringt, wird im nächsten Abschnitt zunächst auf diese eingegangen.
+Wie bereits erwähnt, besitzt der Raspberry Pi in der Version 3 bereits einen BLE Chip. Dadurch wird keine weiter Hardware benötigt. Auf dem Raspi läuft das Linux Betriebssystem Raspbian, welches den Bluetooth Stack \glqq{}bluez\grqq{} mitbringt. Da die Implementierung der GATT Profile auf dem Evaluation-System einige Probleme mit sich bringt, wird im nächsten Abschnitt zunächst auf diese eingegangen.
 
 \subsubsection{Probleme}
-Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im allgemeinen. Während BLE bereits in vielen Projekten im Sensor-, Embedded- und Mobilbereich eingesetzt wird, ist der Einsatz auf einem klassischen Betriebssystem weniger von Bedeutung. Dadurch sind kaum Dokumentationen und Tutorials zu diesem Thema zu finden. Zwar liefert der Bluetooth Stack bluez seit einiger Zeit eine Implementierung für BLE Anwendungen mit, jedoch ist hier wie bei vielen Open Source Projekten, der Quellcode die einzige Dokumentation. Dadurch ist die Hürde für Einsteiger sehr hoch. Ein im Rahmen dieses Projekt entstandenes Papers "Bluetooth Low Energy Programming on Linux", welches im Anhang \ref{sec:paper_ble} beiliegt, beschreibt den Einstieg in die BLE Programmierung unter Linux. Daher wird hier nicht näher darauf eingegangen. 
+Ein wesentlicher Punkt ist die Verbreitung von Bluetooth Low Energy im Allgemeinen. Während BLE bereits in vielen Projekten im Sensor-, Embedded- und Mobilbereich eingesetzt wird, ist der Einsatz auf einem klassischen Betriebssystem weniger von Bedeutung. Dadurch sind kaum Dokumentationen und Tutorials zu diesem Thema zu finden. Zwar liefert der Bluetooth Stack \glqq{}bluez\grqq{} seit einiger Zeit eine Implementierung für BLE Anwendungen mit, jedoch ist hier wie bei vielen Open Source Projekten, der Quellcode die einzige Dokumentation. Dadurch ist die Hürde für Einsteiger sehr hoch. Ein im Rahmen dieses Projekt entstandenes Papers "Bluetooth Low Energy Programming on Linux", welches im Anhang \ref{sec:paper_ble} beiliegt, beschreibt den Einstieg in die BLE Programmierung unter Linux. Daher wird hier nicht näher darauf eingegangen. 
 
 \subsubsection{Implementierung}
-Da die Videoverarbeitung und der Rest unserer Software in Python realisiert sind, setzten wir hier ebenfalls auf eine Pythonlib . Während der Test verschiedener Bibliotheken\footnote{wie bluepy, gatt-python, Adafruit Python BluefruitLE} war pygattlib\footnote{Bitbucket page: \url{https://bitbucket.org/OscarAcena/pygattlib}} die einzigste, mit der sich unser Übertragungsprotokoll, wie in Kapitel \ref{subsubsec:unser_protokoll} beschrieben, problemlos implementieren lies. Pygattlib lässt sich einfach über pip\footnote{ \textbf{P}ip \textbf{I}nstalls \textbf{P}ython und ist eine Paketverwaltung für Python-Module. } installieren und liefert einige nützliche Beispiele mit. Listing \ref{lst:pygattlib_ex} zeigt wie man eingehende BLE Nachrichten empfangen und weiter verarbeiten kann. 
+Da die Videoverarbeitung und der Rest unserer Software in Python realisiert sind, setzten wir hier ebenfalls auf eine Pythonlib . Während der Test verschiedener Bibliotheken\footnote{wie bluepy, gatt-python, Adafruit Python BluefruitLE} war pygattlib\footnote{Bitbucket page: \url{https://bitbucket.org/OscarAcena/pygattlib}} die einzigste, mit der sich unser Übertragungsprotokoll, wie in Kapitel \ref{subsubsec:unser_protokoll} beschrieben, problemlos implementieren lies. Pygattlib lässt sich einfach über pip\footnote{ \textbf{P}ip \textbf{I}nstalls \textbf{P}ython und ist eine Paketverwaltung für Python-Module. } installieren und liefert einige nützliche Beispiele mit. Listing \ref{lst:pygattlib_ex} zeigt, wie man eingehende BLE Nachrichten empfangen und weiter verarbeiten kann. 
 
 \begin{lstlisting}[language=Python, caption=pygattlib: Receive notifications example, label=lst:pygattlib_ex]
   from gattlib import GATTRequester
@@ -121,10 +121,10 @@ Um sich mit dem Sensor zu verbinden muss das pythonscript receive\_notification.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.6\textwidth]{includes/kom/graphics/gatt_classDiagram2}
-  \caption{Klassendiagramm des Verbindungsprogramm auf dem Evaluation System}
+  \caption{Klassendiagramm des Verbindungsprogramm auf dem Evaluation-System}
   \label{fig:classdiagram_connection}
 \end{figure}
 
 
 \subsection{Fazit}
-Bluetooth Low Energy bietet einige Features die sehr gut auf unsere Anforderungen zutrafen. Besonders im Bereich des Sensors kann BLE unter anderem mit seiner Energiesparenden Arbeitsweise punkten. Unser Prototyp schöpft diese Möglichkeiten und Vorteile noch nicht aus. Dennoch war der langfristige Blick in welche sich das Projekt entwickeln kann, immer ein entscheidender Faktor. Der Einsatz des HM10 Modules vereinfachte das Prototyping sehr und bietet dennoch eine gute Grundlage für eine Umstellung auf eine integrierte Lösung. Die Nutzung von BLE unter Linux war unerwartet mit einigen Hürden verbunden. Die Komplexität dieses Themas bzw. die Nutzung von BLE auf Desktop Betriebssystemen im Allgemeinen, bietet genug Potenzial für eigenständige Arbeiten.
+Bluetooth Low Energy bietet einige Features die sehr gut auf die Anforderungen zutrafen. Besonders im Bereich des Sensors kann BLE unter anderem mit seiner energiesparenden Arbeitsweise punkten. Der Prototyp schöpft diese Möglichkeiten und Vorteile noch nicht aus. Dennoch war der langfristige Blick in welche Richtung sich das Projekt entwickeln kann, immer ein entscheidender Faktor. Der Einsatz des HM10 Modules vereinfachte das Prototyping sehr und bietet dennoch eine gute Grundlage für eine Umstellung auf eine integrierte Lösung. Die Nutzung von BLE unter Linux war unerwarteterweise mit einigen Hürden verbunden. Die Komplexität dieses Themas beziehungsweise die Nutzung von BLE auf Desktop Betriebssystemen im Allgemeinen, bietet genug Potential für eigenständige Arbeiten.

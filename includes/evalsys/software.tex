@@ -1,11 +1,11 @@
 \subsection{Software Komponenten} \
 \label{subsec:evalsys_software}
 
-Die Software beinhaltet mehrere Teilbereiche von dem Erkennen eines Triggers bis zur Ablage des vollständigen Videos. Durch recherche über Wildbewegungskameras konnten einige Bereiche der Videoaufnahme erleichtert werden \cite{rasp_ansteuerung}.
+Die Software beinhaltet mehrere Teilbereiche von dem Erkennen eines Triggers bis zur Ablage des vollständigen Videos. Die Software wurde in Python realisiert. Python ist durch sein weites Anwendungsspektrum gut für Prototyping geeignet. Die vielen Bibliotheken erleichtern das implementieren von Lösungen. Durch Recherche über Wildbewegungskameras konnten einige Bereiche der Videoaufnahme erleichtert werden \cite{rasp_ansteuerung}.
 
 \subsubsection{Videoaufnahme}
 
-Für die Ansteuerung der Raspberry Pi Kamera gibt es bereits eine Bibliothek die folgendermaßen eingebunden werden kann:
+Für die Ansteuerung der Raspberry Pi Kamera gibt es bereits eine Bibliothek namens picamera die folgendermaßen eingebunden werden kann:
 
 \begin{lstlisting}[language=Python]
 from picamera import PiCamera
@@ -26,14 +26,14 @@ with PiCamera() as camera:
 			camera.stop_recording()
 \end{lstlisting}
 
-Im obigen Code wird die Bilderanzahl pro Sekunde eingestellt. Danach wird ein Ringpuffer initialisiert, der die Puffergröße von den Sekunden vor und nach einem Trigger hat. Damit sind die Grundeinstellungen durchgeführt und die Kamera kann mit dem Befehl \glqq{} camera.start\_recording \grqq{} aufnehmen. Dem Aufnahmestart wird dabei der Ringpuffer, sowie ein unterstütztes Videoformat übergeben.
+Im obigen Code wird die Bilderanzahl pro Sekunde eingestellt. Danach wird ein Ringpuffer initialisiert, der die Puffergröße von den Sekunden vor und nach einem Trigger hat. Diese sind in einer Konfigurationsdatei hinterlegt (siehe Abschnitt \ref{subsubsec:configfile} ). Damit sind die Grundeinstellungen durchgeführt und die Kamera kann mit dem Befehl \glqq{} camera.start\_recording \grqq{} aufnehmen. Dem Aufnahmestart wird dabei der Ringpuffer, sowie ein unterstütztes Videoformat übergeben.
 
 Danach werden Triggersuche sowie Videoverarbeitung im Zyklus von einer Sekunde der durchlaufen. Die Wartezeit wird mittels der Aufnahme- und Warten-Funktion der Kamera realisiert. Am Ende des Programmes muss die Kameraaufnahme mit dem Befehl "`camera.stop\_recording"' beendet werden.
 
 \subsubsection{Triggererkennung}
 \label{subsubsec:triggererkennung}
 
-Durch das Empfangen und Verifizieren des Bluetooth-Signals wird eine Triggerdatei mit der Endung ".trg" im Ordner recording/trigger erzeugt. Dies ist genauer in \ref{sec:com} beschrieben.
+Durch das Empfangen und Verifizieren des Bluetooth-Signals wird eine Triggerdatei mit der Endung \glqq{}.trg\grqq{} im Ordner recording/trigger erzeugt. Dies ist genauer in Kapitel \ref{sec:com} beschrieben.
 
 Der Name der Datei wird folgendermaßen dargestellt:
 \begin{center}
@@ -64,11 +64,12 @@ Hiermit ist das bisherige Videomaterial vor dem Trigger gesammelt und die Trigge
 
 Da das "`h264"'-Format für die Anzeige auf einer Webapplikation nicht geeignet ist, muss diese in ein anderes Format umgewandelt werden. Dies passiert über ein weiteres Python-Programm, welches über einen Systembefehl angesteuert wird.
 
-Mittels eines Systembefehle und dem Programm "`MP4Box"' können die Videoabschnitte konvertiert, zusammengefügt und in das Zielverzeichnis der Webapplikation verschoben werden \cite{convert_video}. Zuletzt werden die zwei nicht mehr benötigten Teilabschnitte gelöscht.
+Mittels eines Systembefehle und dem Programm "`MP4Box"' \footnote{Mehr Informationen zum Programm Mp4Box sind \href{https://www.videohelp.com/software/My-MP4Box-GUI}{hier} zu finden.} können die Videoabschnitte konvertiert, zusammengefügt und in das Zielverzeichnis der Webapplikation verschoben werden. Zuletzt werden die zwei nicht mehr benötigten Teilabschnitte gelöscht.
 
 \subsubsection{Konfigurationsdatei}
+\label{subsubsec:configfile}
 
-Für das Python-Programm wurden zwei Konfigurationsdateien erstellt. Eine für den Benutzer zugängliche und festgelegte.
+Für die Python-Programme wurden zwei Konfigurationsdateien erstellt. Eine für den Benutzer zugängliche und festgelegte.
 Die Nutzerkonfiguration besteht aus dem Zeitwert der Videoaufnahme vor dem Triggersignal in Sekunden und dem danach.
 Die festgelegte Konfigurationsdatei beinhaltet Pfadnamen sowie Endungen von Trigger-, Video- und Loggerverzeichnissen und -dateien.
 
@@ -81,17 +82,20 @@ from poopfacedetection import configurator
 conf = configurator.Configurator()
 \end{lstlisting}
 
+Damit Python den configurator findet, muss dieser in das Verzeichnis /usr/lib/python3/dist-packages/poopfacedetection/ verschoben werden.
 
 \subsubsection{Webserver}
-Um die aufgenommenen videos leicht zugänglich zu machen, wurde ein einfacher Webserver in das System integriert. Basierend auf dem Python Framework Flask wurde dieser implementiert. Flask bietet eine gute Dokumentation und ist einfach Einzurichten, was es perfekt für Prototyping und kleine Projekte macht. Bei großen Webseiten und Projekten ist er vorallem aus performence Gründen ungeignet. Mehr Informationen und Dokumentationen zu Flask sind unter \href{http://flask.pocoo.org/}{flask.pocoo.org} zu finden. \\
+Um die aufgenommenen videos leicht zugänglich zu machen, wurde ein einfacher Webserver in das System integriert. Basierend auf dem Python Framework Flask wurde dieser implementiert. Flask bietet eine gute Dokumentation und ist einfach einzurichten, was es perfekt für Prototyping und kleine Projekte macht. Bei großen Webseiten und Projekten ist er vorallem aus Performencegründen ungeignet. Mehr Informationen und Dokumentationen zu Flask sind unter \href{http://flask.pocoo.org/}{flask.pocoo.org} zu finden. \\
 \\
-Der Webserver liegt im Verzeichnis /webapp und kann dort über das script run.sh gestartet werden. Es ist dann unter der IP-Adresse des Raspberry Pi erreichbar und beinhaltet drei Seiten welche in den nächsten Absätzen erleutert werden. 
+Der Webserver liegt im Verzeichnis /webapp und kann dort über das script run.sh gestartet werden. Er ist dann unter der IP-Adresse des Raspberry Pi erreichbar und beinhaltet drei Seiten, welche in den nächsten Absätzen erleutert werden. 
 
-\paragraph{Startseite} auf der die letzten Videos angezeigt werden.
+\paragraph{Die Startseite} zeigt eine kurze Übersicht und verlinkt auf die Videoseite.
 
-\paragraph{Videoseite} auf der alle Videos angezeigt werden. Diese ist über einen link auf der Startseite oder über die Route /videos erreichbar.
+\paragraph{Die Videoseite} zeigt alle Videos an. Diese Seite ist über einen Link auf der Startseite oder über die Route /videos erreichbar.
 
-\paragraph{Detailseite} auf der ein einzelnes Video angezeigt wird. Zusätzlich wird dort ein Verhaltensformular, siehe dazu auch Kapitel \ref{sec:verhaltensformular}, dargestellt. \\
+\paragraph{Die Detailseite} zeigt ein einzelnes Video an. Zusätzlich wird dort ein Verhaltensformular, siehe dazu auch Kapitel \ref{sec:verhaltensformular}, dargestellt. \\
 \\
-Die Webseite ist so aufgebaut, dass die aufgenommen Videos nach dem Verarbeiten nur in den Ordner webapp/static/videos kopiert werden müssen. Auf eine optische gestalltung und weitere Möglichkeiten der Konfiguration des Evaluation Systems über den Webserver wurde bewusst verzichtet, da der Fokus dieser Arbeit auf die anderen Teile gelegt wurde.
+Die Webseite ist so aufgebaut, dass die aufgenommenen Videos nach dem Verarbeiten nur in den Ordner webapp/static/videos kopiert werden müssen. Auf eine optische Gestalltung und weitere Möglichkeiten der Konfiguration des Evaluation-Systems über den Webserver wurde bewusst verzichtet, da der Fokus dieser Arbeit auf die anderen Teile gelegt wurde.
 
+\subsubsection{Aktuelle Probleme}
+\todo{noch schreiben}
