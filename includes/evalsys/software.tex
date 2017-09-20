@@ -80,3 +80,18 @@ Um dieses Python-Programm verwenden zu können muss der Konfigurationsparser wie
 from poopfacedetection import configurator
 conf = configurator.Configurator()
 \end{lstlisting}
+
+
+\subsubsection{Webserver}
+Um die aufgenommenen videos leicht zugänglich zu machen, wurde ein einfacher Webserver in das System integriert. Basierend auf dem Python Framework Flask wurde dieser implementiert. Flask bietet eine gute Dokumentation und ist einfach Einzurichten, was es perfekt für Prototyping und kleine Projekte macht. Bei großen Webseiten und Projekten ist er vorallem aus performence Gründen ungeignet. Mehr Informationen und Dokumentationen zu Flask sind unter \href{http://flask.pocoo.org/}{flask.pocoo.org} zu finden. \\
+\\
+Der Webserver liegt im Verzeichnis /webapp und kann dort über das script run.sh gestartet werden. Es ist dann unter der IP-Adresse des Raspberry Pi erreichbar und beinhaltet drei Seiten welche in den nächsten Absätzen erleutert werden. 
+
+\paragraph{Startseite} auf der die letzten Videos angezeigt werden.
+
+\paragraph{Videoseite} auf der alle Videos angezeigt werden. Diese ist über einen link auf der Startseite oder über die Route /videos erreichbar.
+
+\paragraph{Detailseite} auf der ein einzelnes Video angezeigt wird. Zusätzlich wird dort ein Verhaltensformular, siehe dazu auch Kapitel \ref{sec:verhaltensformular}, dargestellt. \\
+\\
+Die Webseite ist so aufgebaut, dass die aufgenommen Videos nach dem Verarbeiten nur in den Ordner webapp/static/videos kopiert werden müssen. Auf eine optische gestalltung und weitere Möglichkeiten der Konfiguration des Evaluation Systems über den Webserver wurde bewusst verzichtet, da der Fokus dieser Arbeit auf die anderen Teile gelegt wurde.
+

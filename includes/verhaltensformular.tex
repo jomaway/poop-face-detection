@@ -1,4 +1,6 @@
 \section{Verhaltensformular}
+\label{sec:verhaltensformular}
+
 Damit die Videos ausgewertet werden können, wurde ein Verhaltensformular erstellt. Dieses Formular lehnt sich an generelle Ausdrucksweisen von Babies an.
 Die Auswertung kann in späteren Projekten ausgeführt werden.
 
@@ -17,7 +19,7 @@ Um die eingegebenen Daten auf dem Server zu speichern, wurde ein Speicherknopf i
 
 Das Auslesen und Speichern der Daten des Formulars funktioniert mittels der POST-Methode. Diese greift auf den aktuellen Zustand der angegebenen Textfelder, Radiobuttons und Checkbuttons zu.
 
-\begin{lstlisting}[language=Python, caption=pygattlib: Receive notifications example, label=lst:pygattlib_ex]
+\begin{lstlisting}[language=Python, caption=webapp: verhaltensformular]
 @app.route('/video/<day>', methods=['GET', 'POST'])
 def day_view(day):	
 	form = BehaviourForm()
