@@ -176,11 +176,34 @@ Wie in der Grafik dargestellt werden zwei Kondensatoren und ein Widerstand in Re
 
 Mit dem Arduino lässt sich die Spannung auslesen und nach geeigneter Kalibierung ein Grenzwert finden. Wird ein signifikanter Einbruch der Ausgangsspannung (Output) detektiert wird im Arduino die entsprechende Variable gesetzt wird per BLE (Bluetooth Low Energy) ein entsprechendes Signal an den aufnehmenden Raspberry Pi geschickt.
 
+\begin{lstlisting}[language=C, caption=Feuchtigkeitsdetektion im Arduino]
+bool moistureSensor() {
+  bool returnValueMois = false;
+  sensorValueMois = analogRead(sensorPinMois);
+  Serial.print(sensorValueMois);
+  if (sensorValueMois > 0) {
+     if (sensorValueMois < 50) {
+        moisturectr++;
+        if (moisturectr > 3) {
+          Serial.print("Wet!\n");
+          moisturectr = 0;
+          returnValueMois = true;
+        }
+      }
+      else {
+       moisturectr = 0;
+      }
+  }
+  return returnValueMois;
+}
+\end{lstlisting}
+
+Die Feuchtigkeitssensoren ist sehr fehleranfällig. Daher wird in mehreren, in dem Fall drei, Zyklen abgeprüft ob der gemessene Feuchtigkeitswert konstant bleibt. Ist dies der Fall löst der Arduino aus und setzt das entsprechende Flag (\glqq{}returnValueMois = true;\grqq{}). Der gesetzte Wert wird zurückgegeben und an den Rasberry-Pi geschickt. 
  
 \subsubsection{Unterschiede und Vor-/ Nacheile zum resistiven Feuchtkeitssensor}
 Nachdem der prinzipielle Aufbau und die Funktionsweise erklärt wurde, muss man noch auf den wesentlichen Unterschied zum resistiven Feuchtigkeitssensor eingehen. Wie vom Namen ableitbar erkennt der resitive Widerstandssensor Feuchtigkeit über eine Widerstandsmessung. Ist die Windel bzw. das allgemeine Umfeld trocken ist der Widerstand groß und es fließt kaum Strom. Wird das Umfeld nun leitbar gemacht, etwa durch Urin oder Wasser, steigt die Leitfähigkeit es kann durch einen Mikrokontroller eine Widerstandsänderung ausgelesen werden. 
 
-Vorteile des restiven Feuchtigkeitsensors  ist die leichte Installation in die Windel. Mit Hilfe des Arduinos lässt sich recht einfach der Spannungsabfall und der daraus resultierende Stromfluss auslesen. D.h. mit relativ wenig Aufwand bekommt man schon auswertbare Ergebnisse. Das ist wiederum ein Nachteil des kapazitiven Feuchtigkeitssensors. Uns hat es einigen Aufwand gekostet die Simulation, Messungen und Berechnungen soweit in Einklang zu bringen, dass wir ein auswertbares Signal und einen geeigneten Triggerpunkt gefunden hatten mit dem man die Feuchtigkeit auslesen kann.
+Vorteile des restiven Feuchtigkeitsensors  ist die leichte Installation in die Windel. Mit Hilfe des Arduinos lässt sich auf eine simple Weise der Spannungsabfall und der daraus resultierende Stromfluss auslesen. D.h. mit relativ wenig Aufwand bekommt man schon auswertbare Ergebnisse. Das ist wiederum ein Nachteil des kapazitiven Feuchtigkeitssensors. Es kostet einigen Aufwand die Simulation, Messungen und Berechnungen soweit in Einklang zu bringen, dass sich ein auswertbares Signal und ein geeigneter Triggerpunkt gefunden wird, mit dem man den Feuchtigkeitsanstieg auslesen kann.
 
 Im Gegensatz dazu ist der große Vorteil des kapaztiven Feuchtigkeitssensor zum resistiven die nicht einsetzende Korrosion. Da nicht mit Stromflüssen gearbeitet wird, sondern mit Kapazitätsunterschieden, korridieren die Metalldrähte nicht und man bekommt eine signifikant längere Lebensdauer der Drähte in der Windel und hat keine medizinischen Bedenken.
 \pagebreak
@@ -191,14 +214,14 @@ Angefangen mit der Konzeption wurde mit LT-Spice-Simulationen. Dafür mussten he
 %Bild vom finalen Konzept
 \begin{figure}[ht]
 	\centering
-		\includegraphics[width=0.6\textwidth]{includes/kom/graphics/cap_sensor_final}
+		\includegraphics[width=0.6\textwidth]{includes/kom/graphics/windel_cap_sensor_final}
 	\caption{Finales Konzept Feuchtigkeitssensor}
 	\label{fig:cap_sensor_final}
 \end{figure}
 
-Mit dieser Form hatten wir schon eine Kapazität von 28 - 30 pF (je nach Messung), die wir in vernüftig in LT-Spice simulieren konnten. Laut Kapazitätsformel 
+Mit dieser Form hatte der Feuchtigkeitssensor eine Kapazität von 28 - 30 pF (je nach Messung). Laut Kapazitätsformel 
 \[C =  \varepsilon * \frac{A}{d}\]
-müssten wir mit Wasser als Dielektrikum ($\varepsilon$) eine Kapazitätserhöhung von mindestens Faktor 80 haben\footnote{http://www.spektrum.de/lexikon/physik/dielektrizitaetskonstante/3040}. Die erhöhte Kapazität lässt sich dann durch die angelegte Rechteckspannung und die Referenzkapazität detektieren.
+ist mit Wasser als Dielektrikum ($\varepsilon$) eine Kapazitätserhöhung von mindestens Faktor 80 möglich\footnote{http://www.spektrum.de/lexikon/physik/dielektrizitaetskonstante/3040}. Die erhöhte Kapazität lässt sich dann durch die angelegte Rechteckspannung und die Referenzkapazität detektieren.
 
 %Bilder von nasser und trockner Messung
 \begin{figure}[ht]
@@ -229,9 +252,9 @@ Einerseits lassen sich die Metallfäden nicht an andere Kabel löten, da das Met
 Andererseits war das Metallgarn durch seine Beschichtung nicht vollständing elektrisch isoliert. Ist die Windel mit dem eingenähten Garn nun nass geworden waren die zwei Fäden nicht mehr isoliert zu einandander und der aufgebaute Kondensator verlor seine Kapazität. 
 
 \subsection{Fazit}
-Mit dem jetzigen Stand kann man verlässlich die Feuchtigkeit in der Windel detektieren. Dazu wird nicht nur die Feuchtigkeit sondern auch ein rabiater Temperaturanstieg gemessen. Zeigen beide Sensoren eine große Veränderung kann man davon ausgehen das Baby soweit in die Windel uriniert hat. 
+Mit dem jetzigen Stand kann man verlässlich die Feuchtigkeit in der Windel detektieren. Dazu wird nicht nur die Feuchtigkeit sondern auch ein rabiater Temperaturanstieg gemessen. Zeigen beide Sensoren eine große Veränderung kann man davon ausgehen das Baby in die Windel uriniert hat. 
 Eines der größeren Probleme ist mit Sicherheit das Metallgarn. Hier lässt sich der Sensor optimieren indem man einen vollständig nach außen elektrisch isolierten Leiter findet. Ebenfalls lässt sich die Verarbeitungsmöglichkeit des Metallgarns noch verbessern oder geeignete Löt- oder Klebeverfahren finden.
 
-Nichtsdestrotz machen die Sensoren genau das was wir uns am Anfang des Projekts als Ziel gesetzt haben. Die Sensoren detektieren Feuchtigkeit und Wärmeanstieg verlässlich und lassen sich in die Windel integrieren. 
+Nichtsdestrotz funktionieren die Sensoren genau so wie es das Ziel am Anfang des Projekts war. Die Sensoren detektieren verlässlich Feuchtigkeit und Wärmeanstieg in der Windel und lassen sich in die Windel integrieren. 
 
 \pagebreak
