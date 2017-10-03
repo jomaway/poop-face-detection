@@ -1,10 +1,11 @@
 \section{Einrichtung des Raspberry Pi}
 \label{sec:Einrichtung_Raspi}
+
+Hier wird kurz die Einrichtung des Betriebsystems Raspbian auf dem Raspberry Pi erläutert.
+
 \subsection{Raspian}
 
 Als Betriebssystem wurde sich für das auf debian basierende Raspbian entschieden. Im folgenden wird kurz geschildert, welche Schritte nötig sind, um dies auf dem Raspberry Pi einzurichten.
-
-
 
 \begin{enumerate}
   \item Download des Image unter raspberrypi.org (Version: Rasbian Jessi Pixel, da diese eine gui mitbringt, welche zum Prototyping von Vorteil ist.)
@@ -28,7 +29,7 @@ Als Betriebssystem wurde sich für das auf debian basierende Raspbian entschiede
 
 \subsection{Grundkonfiguration des Raspberry Pi}
 
-Link: https://www.elektronik-kompendium.de/sites/raspberry-pi/1906291.htm
+Für eine bessere Benutzbarkeit des Systems wurden einige Grundkonfigurationen vorgenommen. Generelle Informationen dazu sind unter \url{https://www.elektronik-kompendium.de/sites/raspberry-pi/1906291.htm} zu finden.
 
 \paragraph{Hostname} \hspace{0pt} \\
 Der Hostname des Raspi wird auf poopface\_eval\_sys geändert
@@ -49,13 +50,13 @@ Um WLAN über eine Konsole einzurichten, muss man sich mittels su als root einlo
 
 \begin{itemize}
   \item iwlist wlan0 scan // scan all wifis to show ESSID:
-  \item wpa\_cli reconfigure /7 if not recorgnized automatically
+  \item wpa\_cli reconfigure // if not recorgnized automatically
   \item ifconfig wlan0 up // if wlan is not up
   \item ifconfig wlan0 // to get the address from which you can connect to via SSH.
   \item delete \#psk="PASSWORD" line from /etc/wpa\_supplicant/wpa\_supplicant.conf
 \end{itemize}
 
-Link: https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
+Weitere Informationen unter \url{ https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md}.
 
 \paragraph{Software and Updates} \hspace{0pt} \\
 Check for updates via sudo apt update \&\& sudo apt upgrade
@@ -66,6 +67,6 @@ Installiere falls noch nicht vorhanden:
 \begin{itemize}
   \item python3
   \item python3-pip
-  \item TODO: alle abhängigkeiten für bluetooth hinzufügen
 \end{itemize}
+
 
