@@ -175,6 +175,7 @@ Die Detektion von Feuchtigkeit in der Windel gelingt mit einem kapazitiven Feuch
 Wie in der Grafik dargestellt werden zwei Kondensatoren und ein Widerstand in Reihe geschalten und die Spannung über einem Kondensator abgenommen. Da der Arduino Rechteckspannung erzeugen kann wirken die Kondesatoren wie Widerstände. Erhöht man nun die Kapazität des einen Sensors ändert sich der jeweilig anteilige Spannungsabfall.
 
 Mit dem Arduino lässt sich die Spannung auslesen und nach geeigneter Kalibierung ein Grenzwert finden. Wird ein signifikanter Einbruch der Ausgangsspannung (Output) detektiert wird im Arduino die entsprechende Variable gesetzt wird per BLE (Bluetooth Low Energy) ein entsprechendes Signal an den aufnehmenden Raspberry Pi geschickt.
+\pagebreak
 
 \begin{lstlisting}[language=C, caption=Feuchtigkeitsdetektion im Arduino]
 bool moistureSensor() {
@@ -198,7 +199,7 @@ bool moistureSensor() {
 }
 \end{lstlisting}
 
-Die Feuchtigkeitssensoren ist sehr fehleranfällig. Daher wird in mehreren, in dem Fall drei, Zyklen abgeprüft ob der gemessene Feuchtigkeitswert konstant bleibt. Ist dies der Fall löst der Arduino aus und setzt das entsprechende Flag (\glqq{}returnValueMois = true;\grqq{}). Der gesetzte Wert wird zurückgegeben und an den Rasberry-Pi geschickt. 
+Der Feuchtigkeitssensor ist sehr fehleranfällig. Daher wird in mehreren, in dem Fall drei, Zyklen abgeprüft ob der gemessene Feuchtigkeitswert konstant bleibt. Ist dies der Fall löst der Arduino aus und setzt das entsprechende Flag (\glqq{}returnValueMois = true;\grqq{}). Der gesetzte Wert wird zurückgegeben und an den Rasberry-Pi geschickt. 
  
 \subsubsection{Unterschiede und Vor-/ Nacheile zum resistiven Feuchtkeitssensor}
 Nachdem der prinzipielle Aufbau und die Funktionsweise erklärt wurde, muss man noch auf den wesentlichen Unterschied zum resistiven Feuchtigkeitssensor eingehen. Wie vom Namen ableitbar erkennt der resitive Widerstandssensor Feuchtigkeit über eine Widerstandsmessung. Ist die Windel bzw. das allgemeine Umfeld trocken ist der Widerstand groß und es fließt kaum Strom. Wird das Umfeld nun leitbar gemacht, etwa durch Urin oder Wasser, steigt die Leitfähigkeit es kann durch einen Mikrokontroller eine Widerstandsänderung ausgelesen werden. 
@@ -206,7 +207,6 @@ Nachdem der prinzipielle Aufbau und die Funktionsweise erklärt wurde, muss man 
 Vorteile des restiven Feuchtigkeitsensors  ist die leichte Installation in die Windel. Mit Hilfe des Arduinos lässt sich auf eine simple Weise der Spannungsabfall und der daraus resultierende Stromfluss auslesen. D.h. mit relativ wenig Aufwand bekommt man schon auswertbare Ergebnisse. Das ist wiederum ein Nachteil des kapazitiven Feuchtigkeitssensors. Es kostet einigen Aufwand die Simulation, Messungen und Berechnungen soweit in Einklang zu bringen, dass sich ein auswertbares Signal und ein geeigneter Triggerpunkt gefunden wird, mit dem man den Feuchtigkeitsanstieg auslesen kann.
 
 Im Gegensatz dazu ist der große Vorteil des kapaztiven Feuchtigkeitssensor zum resistiven die nicht einsetzende Korrosion. Da nicht mit Stromflüssen gearbeitet wird, sondern mit Kapazitätsunterschieden, korridieren die Metalldrähte nicht und man bekommt eine signifikant längere Lebensdauer der Drähte in der Windel und hat keine medizinischen Bedenken.
-\pagebreak
 
 \subsubsection{Umsetzung und Entwicklung in der Praxis}
 Angefangen mit der Konzeption wurde mit LT-Spice-Simulationen. Dafür mussten herausgefunden werden wie groß die Kapazität der zwei parallelen Drahtfäden in der Windel ist. Nach den Anfangs sehr kleinen und detektierbaren Kapazitäten mit einer einfachen parallelen Form wurde schnell umgedacht. Durch Biegung der Drahtfäden wurde die Länge der Leiterbahnen und somit die Fläche der Kondensatorplatten (A) vergrößert.
