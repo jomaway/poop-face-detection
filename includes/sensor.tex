@@ -24,11 +24,15 @@ Funktionsweise näher erläutert.
 
 
 \subsection{Temperatursensor}
-Da die Ausscheidungen eines Menschen die Körperkerntemperatur besitzen
-und diese um einige Grad höher ist als die Oberflächentemperatur, kann
-dieser Unterschied leicht detektiert werden und als Signal verwendet
-werden. Die anfängliche Idee eine Temperaturschwelle festzulegen und
-bei Überschreitung dieser ein Signal auszulösen, wurde verworfen da
+\label{sec:Temperatursensor}
+Dieses Kapitel befasst sich mit den Anforderungen und der Funktionsweise eines Temperatursensor. Es wird  auf Probleme während der Entwicklung und allgemein entstandene Probleme eingegangen.
+
+\subsubsection{Anforderungen}
+\label{sec:temp_requirements}
+Die Ausscheidungen eines Menschen besitzen Körperkerntemperatur. Diese ist um einige Grad höher als die Oberflächentemperatur. Die Anforderung an den zu verwendenden Sensor ist, die Temperaturänderung in der Windel sicher zu detektieren. Außerdem soll der Sensor beim Tragen nicht unangenehm auffallen und mehrmaliges Waschen überstehen.
+
+\subsubsection{Funktionsweise}
+Der Unterschied zwischen Körperkerntemperatur und Körperoberflächentemperatur kann leicht detektiert werden und als Trigger-Signal verwendet werden. Die anfängliche Idee eine Temperaturschwelle festzulegen und bei Überschreitung dieser ein Signal auszulösen, wurde verworfen da
 das Ansteigen der Umgebungstemperatur oder ein Fieber zum Anschlagen
 des Sensors führen würde und somit einen Fehlalarm auslösen könnte.
 Diese Änderungen entstehen über einen längeren Zeitraum, wohingegen
@@ -45,8 +49,7 @@ sich also ein Widerstand ändert, ändert sich auch der
 Potenzialunterschied. Ein großer Vorteil dieser Messbrücke ist die
 Genauigkeit der Messung, welche ohne Offset vorliegt. Jedoch ist
 dieser Vorteil in diesem Projekt ein großer Nachteil, weil die Schaltung
-sehr sensibel ist. Außerdem ist das Abgleichen der Brückenschaltung in der Praxis unmöglich, da die einzelnen Babies unterschiedliche Körpertemperaturen haben. Aufgrund dieses Nachteils und der nicht vorhandenen Notwendigkeit der
-Genauigkeit der Temperaturmessung, wurde auf eine Implementierung einer Wheatstone-Brücke verzichtet.
+sehr sensibel ist. Außerdem ist das Abgleichen der Brückenschaltung in der Praxis unmöglich, da jedes Baby eine unterschiedliche Körpertemperatur hat. Aufgrund dieses Nachteils und der nicht vorhandenen Notwendigkeit der Genauigkeit der Temperaturmessung, wurde auf eine Implementierung einer Wheatstone-Brücke verzichtet.
 
 \begin{figure}
 \centering
@@ -59,8 +62,8 @@ Die zweite Version des Sensors wurde mittels eines analogen
 Temperatursensors (KY-013) realisiert, welcher im Arduino-Sensor-Kit
 vorhanden ist. Dieses Modul besteht aus einem festen Widerstand, der als
 Referenz und zur Strombegrenzung dient, welcher in Reihe mit einem
-temperaturveränderlichen NTC-Thermistor geschalten ist. (Bild \ref{fig:tempsens})
-Dieser NTC-Termistor hat einen Widerstand der mit steigender Temperatur sinkt. (Bild \ref{fig:tempkurve}).
+temperaturveränderlichen NTC-Thermistor geschalten ist (Abbildung \ref{fig:tempsens}).
+Dieser NTC-Termistor hat einen Widerstand der mit steigender Temperatur sinkt. (Abbildung \ref{fig:tempkurve}).
 
 \begin{figure}
 \centering
@@ -119,6 +122,8 @@ In den Zeilen 7 - 10 des Listing 2 ist der Quellcode so geschrieben, dass er auf
 schnelle Änderung der Temperatur anspricht, was wie oben beschrieben
 auf Exkretion hindeutet\footnote{Der komplette Code ist auf
 \url{https://github.com/jomaway/poop-face-detection_sensor}.}.
+
+\subsubsection{Probleme und Ausblick}
 Im Gegensatz zum Feuchtigkeitssensor, welcher flächendeckend in die
 Einlage eingenäht ist, misst der Temperatursensor sehr punktuell. Dies
 stellt ein Problem dar, da je nach Geschlecht des Babys der Urin an
@@ -130,7 +135,7 @@ Stellen detektieren zu können, was aber die Kosten der Windel
 steigern würde. Ein nicht praktikabler Lösungsweg wäre eine mittige
 Anbringung des Sensors. Die Flüssigkeit würde sich zwar im Stoff bis
 dorthin ausbreiten, jedoch wäre die Temperatur bis dort so weit
-abgekühlt, dass eine sichere Detektion nicht mehr sichergestellt
+abgekühlt, dass eine hundertprozentige Detektion nicht mehr sichergestellt
 werden kann.
 Das verwendete Modul ist durch seine rechteckige Form nur für einen
 Prototyp geeignet. Für die weitere Entwicklung bzw. Verwendung des
@@ -255,6 +260,6 @@ Andererseits war das Metallgarn durch seine Beschichtung nicht vollständing ele
 Mit dem jetzigen Stand kann man verlässlich die Feuchtigkeit in der Windel detektieren. Dazu wird nicht nur die Feuchtigkeit sondern auch ein rabiater Temperaturanstieg gemessen. Zeigen beide Sensoren eine große Veränderung kann man davon ausgehen das Baby in die Windel uriniert hat. 
 Eines der größeren Probleme ist mit Sicherheit das Metallgarn. Hier lässt sich der Sensor optimieren indem man einen vollständig nach außen elektrisch isolierten Leiter findet. Ebenfalls lässt sich die Verarbeitungsmöglichkeit des Metallgarns noch verbessern oder geeignete Löt- oder Klebeverfahren finden.
 
-Nichtsdestrotz funktionieren die Sensoren genau so wie es das Ziel am Anfang des Projekts war. Die Sensoren detektieren verlässlich Feuchtigkeit und Wärmeanstieg in der Windel und lassen sich in die Windel integrieren. 
+Nichtsdestotrotz funktionieren die Sensoren genau so wie es das Ziel am Anfang des Projekts war. Die Sensoren detektieren verlässlich Feuchtigkeit und Wärmeanstieg in der Windel und lassen sich in die Windel integrieren. 
 
 \pagebreak
